@@ -15,9 +15,47 @@
   <p>Click on the button for a surprise.</p>
 
   <button onClick="showPicture()" class="btn btn-dark">Click me</button>
+  <button onClick="test()" class="btn btn-dark">test4</button>
 
   <div id="image"></div>
   
 </body>
 
 </html>
+<script>
+function test()
+{
+
+  var request = new XMLHttpRequest()
+
+  rfa_rating = "&rating=gold";
+  var url = "https://api2.redflagalert.net/v4/companies/?" + 
+         
+            rfa_rating;
+  console.log(url);
+
+  
+  request.open('GET', url, true)
+  //request.setRequestHeader("Basic","dEFrbnViUENSTDJHdnRYdm1XTDd1aTEzWjpPdU5TQVBBVzBXaEMyNHV5RkNGemlhU2FWb0IyTldMSTFTVmdZVFMyM2E5");
+  //request.setRequestHeader("auth","dEFrbnViUENSTDJHdnRYdm1XTDd1aTEzWjpPdU5TQVBBVzBXaEMyNHV5RkNGemlhU2FWb0IyTldMSTFTVmdZVFMyM2E5");
+  //request.setRequestHeader("Authorization","dEFrbnViUENSTDJHdnRYdm1XTDd1aTEzWjpPdU5TQVBBVzBXaEMyNHV5RkNGemlhU2FWb0IyTldMSTFTVmdZVFMyM2E5");
+  //request.setRequestHeader("X-Auth","dEFrbnViUENSTDJHdnRYdm1XTDd1aTEzWjpPdU5TQVBBVzBXaEMyNHV5RkNGemlhU2FWb0IyTldMSTFTVmdZVFMyM2E5");
+  request.setRequestHeader("Authorization","Basic dEFrbnViUENSTDJHdnRYdm1XTDd1aTEzWjpPdU5TQVBBVzBXaEMyNHV5RkNGemlhU2FWb0IyTldMSTFTVmdZVFMyM2E5");
+  request.onload = function() 
+	{
+  	// Begin accessing JSON data here
+  		var data = JSON.parse(this.response)
+      console.log(data);    
+  }
+  request.send()
+
+
+
+
+console.log("End...");
+
+
+}
+
+
+</script>

@@ -14,11 +14,17 @@
 
   <p>Click on the button for a surprise.</p>
 
-  <button onClick="showPicture()" class="btn btn-dark">Click me</button>
-  <button onClick="test()" class="btn btn-dark">test4</button>
+  <button onClick="showPicture()" class="button">Click me</button>
+  <button onClick="test()" class="button">test4</button>
 
   <div id="image"></div>
   
+  
+		<p style="margin-bottom: 0px">Displays the first 50 records found from search criteria.</p>
+		<p id="search_results">X</p>		
+	
+
+
 </body>
 
 </html>
@@ -36,19 +42,241 @@ function test()
 
   
   request.open('GET', url, true)
-  //request.setRequestHeader("Basic","dEFrbnViUENSTDJHdnRYdm1XTDd1aTEzWjpPdU5TQVBBVzBXaEMyNHV5RkNGemlhU2FWb0IyTldMSTFTVmdZVFMyM2E5");
-  //request.setRequestHeader("auth","dEFrbnViUENSTDJHdnRYdm1XTDd1aTEzWjpPdU5TQVBBVzBXaEMyNHV5RkNGemlhU2FWb0IyTldMSTFTVmdZVFMyM2E5");
-  //request.setRequestHeader("Authorization","dEFrbnViUENSTDJHdnRYdm1XTDd1aTEzWjpPdU5TQVBBVzBXaEMyNHV5RkNGemlhU2FWb0IyTldMSTFTVmdZVFMyM2E5");
-  //request.setRequestHeader("X-Auth","dEFrbnViUENSTDJHdnRYdm1XTDd1aTEzWjpPdU5TQVBBVzBXaEMyNHV5RkNGemlhU2FWb0IyTldMSTFTVmdZVFMyM2E5");
   request.setRequestHeader("Authorization","Basic dEFrbnViUENSTDJHdnRYdm1XTDd1aTEzWjpPdU5TQVBBVzBXaEMyNHV5RkNGemlhU2FWb0IyTldMSTFTVmdZVFMyM2E5");
   request.onload = function() 
 	{
   	// Begin accessing JSON data here
-  		var data = JSON.parse(this.response)
-      console.log(data);    
+  		var obj1 = JSON.parse(this.response)
+
+      number_records_formatted = formatNumber(obj1.meta.count);
+      console.log(number_records_formatted);    
+
+      txt = "<table class='scheduler-list-table' id='table'>";
+      txt += "<tr><td style='width: 20px'>" + "Company No." 
+                + "</td><td align='left' style='width: 200px'>" + "Company Name" 
+                + "</td><td align='right' style='width: 20px'>" + "Postcode" 
+                + "</td><td align='right' style='width: 16px'>" + "Type" 
+                + "</td><td align='right' style='width: 40px'>" + "Turnover" 
+                + "</td><td align='right' style='width: 20px'>" + "Employees" 
+                + "</td><td align='right' style='width: 50px'>" + "Oldest Director" 
+                + "</td><td align='right' style='width: 200px'>" + "SIC Description"  
+                + "</td><td align='right' style='width: 60px'>" + "RFA Rating" + 
+                "</td></tr>";
+
+      var newdata = obj1.data;
+
+      //console.log(newdata);
+      for (i=0; i<newdata.length; i++) 
+      {
+        has_estimate_employees = "N";
+    has_employees = "N";
+    employees = "";
+    if (!newdata[i].attributes.employees) 
+    {
+    }
+    else 
+    {
+        employees = formatNumber(newdata[i].attributes.employees); 
+        has_employees = "Y";
+    }
+    if (has_employees == "N")
+    {
+        if (!newdata[i].attributes.estimated_employees) 
+        {
+        }
+        else
+        {
+            employees = formatNumber(newdata[i].attributes.estimated_employees) + " (est.)"; 
+            has_estimate_employees = "Y";
+        }
+    }
+
+    sic07_descriptions = "Not Known";
+    if (!newdata[i].attributes.sic07_group_descriptions) 
+    {}
+    else
+    {
+        sic07_descriptions = newdata[i].attributes.sic07_group_descriptions;
+    }
+    if (!newdata[i].attributes.rfa_rating.short_description) 
+    {
+        var short_description = " ";
+    }
+    else 
+    {
+        var short_description = newdata[i].attributes.rfa_rating.short_description;
+        var rating_code = newdata[i].attributes.rfa_rating.short_code;
+    }       
+
+    has_estimate_turnover = "N";
+    has_turnover = "N";             
+    var turnover = " "; 
+    if (!newdata[i].attributes.turnover) 
+    {
+    }
+    else 
+    {
+        var turnover = formatNumber(newdata[i].attributes.turnover); 
+        has_turnover = "Y";
+    }
+    if (has_turnover == "N")
+    {
+        if (!newdata[i].attributes.estimated_turnover) 
+        {
+        }
+        else
+        {
+            var turnover = formatNumber(newdata[i].attributes.estimated_turnover) + " (est.)"; 
+            has_estimate_turnover = "Y";
+        }
+    }
+
+    if (!newdata[i].attributes.oldest_director) 
+    {
+        var oldest_director = "";
+    }
+    else 
+    {
+        if (!newdata[i].attributes.oldest_director.title)
+        {                       
+            title = "";
+        }
+        else
+        {
+            title = newdata[i].attributes.oldest_director.title + " ";
+        }
+        var oldest_director = title + newdata[i].attributes.oldest_director.first_name + " " + newdata[i].attributes.oldest_director.surname; 
+    }
+    var id = newdata[i].id;
+                
+    name = toTitleCase(newdata[i].attributes.name);
+
+    if (newdata[i].attributes.addresses && newdata[i].attributes.addresses.length) 
+    {
+        if (!newdata[i].attributes.addresses[0].postcode) 
+        {
+            var postcode = " ";
+        }
+        else 
+        {
+            var postcode = newdata[i].attributes.addresses[0].postcode; 
+        }
+    
+        if (!newdata[i].attributes.addresses[0].address_line_1)             
+        {
+            var address_line_1 = " ";           
+        }
+        else            
+        {
+            var address_line_1 = newdata[i].attributes.addresses[0].address_line_1;         
+        }
+        if (!newdata[i].attributes.addresses[0].address_line_2)             
+        {
+            var address_line_2 = " ";           
+        }
+        else            
+        {
+            var address_line_2 = newdata[i].attributes.addresses[0].address_line_2;     
+        } 
+        var address = address_line_1 + " " +address_line_2; 
+    
+        if (!newdata[i].attributes.addresses[0].type)           
+        {
+            var type = " ";         
+        }
+        else            
+        {
+            var type = newdata[i].attributes.addresses[0].type;     
+        } 
+    }
+    else 
+    { 
+        var postcode = " ";
+        var address = " " ;
+        var type = " ";
+    }
+    colour = "gray";
+    if (rating_code == "silver")
+    {
+        colour = "silver";              
+    }
+    else if (rating_code == "gold")
+    {
+        colour = "gold";                
+    }
+    else if (rating_code == "bronze")
+    {
+        colour = "bronze";              
+    }
+    else if (rating_code == "redflag1" || rating_code == "redflag2" || rating_code == "redflag3")
+    {
+        colour = "red";             
+    }
+    else if (rating_code == "amber")
+    {
+        colour = "amber";               
+    }
+    estimate_colour = "";
+    if (has_estimate_employees == "Y")
+    {
+        employee_colour = "#3b56f8";
+    }
+    else
+    {
+        employee_colour = "";
+    }
+    turnover_colour = "";
+    if (has_estimate_turnover == "Y")
+    {
+        turnover_colour = "#3b56f8";
+    }
+    else
+    {
+        turnover_colour = "";
+    }
+    //console.log("Company type: " + newdata[i].attributes.company_type);
+    //private-limited-guarant-nsc-limited-exemption
+    company_type = "other";   
+    if (newdata[i].attributes.company_type == "ltd")
+    {
+        company_type = "Limited";
+    }
+    else if (newdata[i].attributes.company_type == "plc")
+    {
+        company_type = "PLC";
+    }
+    else if (newdata[i].attributes.company_type == "llp")
+    {
+        company_type = "LLP";
+    }
+    else if (newdata[i].attributes.company_type == "private-unlimited")
+    {
+        company_type = "Non Limited";
+    }
+    txt += 
+            "<tr><td style='width: 20px' style='font-weight:600'>" + id 
+            + "</td><td align='left' style='width: 200px'>" + name
+            + "</td><td align='right' style='width: 20px'>" + postcode 
+            + "</td><td align='right' style='width: 16px'>" + company_type
+            + "</td><td align='right' style='width: 40px;color: " + turnover_colour + ";'>" + turnover
+            + "</td><td align='right' style='width: 20px;color: " + employee_colour + ";'>" + employees
+            + "</td><td align='right' style='width: 50px'>" + oldest_director   
+            + "</td><td align='right' style='width: 200px'>" + sic07_descriptions
+            + "</td><td align='right' style='width: 60px'>" + 
+            "<div class='wrap-ind'>" + short_description + "&nbsp" + "<span class='indicator " + colour + "'></span></div>"
+            + "</td></tr>";
+} // Loop array
+
+      
+
+
   }
   request.send()
 
+  txt += "</table>"; 
+                
+                document.getElementById("search_results").innerHTML = txt;
+        
 
 
 
@@ -56,6 +284,13 @@ console.log("End...");
 
 
 }
-
-
+function formatNumber(num) {    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')     }
+const toTitleCase = (phrase) => 
+{
+    return phrase
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
 </script>

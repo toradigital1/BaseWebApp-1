@@ -13,37 +13,1336 @@
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
  		<script src="../js/bootstrap-select.js"></script>
 
+     <script type="text/javascript">
+
+      $(document).ready(function() 
+      {
+              InitialPageLoad();
+          
+              //setInterval(BuildScheduleList,10*1000); 		// Refresh Scheduler List every 10 seconds
+
+
+          var mySelect = $('#first-disabled2');
+
+          $('#special').on('click', function () 
+          {
+              mySelect.find('option:selected').prop('disabled', true);
+              mySelect.selectpicker('refresh');
+          });		
+          $('#special2').on('click', function () 
+          {
+               mySelect.find('option:disabled').prop('disabled', false);
+               mySelect.selectpicker('refresh');
+          });
+          $('#basic2').selectpicker(
+          {
+               liveSearch: true,
+               maxOptions: 1
+          });
+      });
+      $(document).keypress(function (e) 	// Check for when enter is pressed
+      {
+            if (e.which == 13) 
+          {
+              GetZohoData();
+               return false; 
+          }
+      });
+      </script>
+
+<style>
+      .scheduler-heading
+      {
+        line-height: 1.35em;
+        text-align: center;
+        font-size: 20px;
+        margin: 0px;
+      }
+      .progress-bar
+      {
+        background-color: #ee2e24;
+      }
+      .rfa-label:hover, .rfa-label:active 
+      {
+          cursor: pointer;
+            color:#3cadd4;
+      }
+      sup 
+      {
+          vertical-align: super;
+          font-size: smaller;
+          color: red;
+      }
+      .info_sub
+      {
+          vertical-align: super;
+          font-size: smaller;
+          color: green;
+      }
+      
+      .container1 
+      {
+          display: grid;
+          grid-template-columns: auto auto; /* 2 COL LAYOUT */
+      }
+      .divL, .divR 
+      {
+          box-sizing: border-box;
+        /*padding: 10px;*/
+      }
+      .divL 
+      {
+          width: 100%;
+          width: 1200px;
+      }
+      .divR 
+      {
+          text-align: right;
+          width: 100% ;
+      }
+      
+      @media only screen and (max-width: 768px) 
+      {
+        .container 
+        {
+          display: block;
+                /* OPTIONAL WIDTH
+                width: 100% */
+        }
+      }
+      .column1
+      {
+          width: 15%;
+      }
+      
+      </style>
+      
 
 
 
 </head>
 
 <body>
-  <!-- the classes 'page-header' and 'btn btn-dark' create bootstrap components.  -->
-  <!-- Check out more components here: http://getbootstrap.com/components/ -->
-  <div class="page-header">
 
+  <div class="prospector-version-title">
+		<img class="redflag" src="redflag.png">
+        <img class="redflag" src="connect-linkedin.png">
+   		<p class="prospector-version-title" id="prospector-title">Leads Prospector</p>
+    </div>	
+	<div class="subscription-div">
+		<p class="subscription-plan-title" id="version-title">Loading subscription status...</p>
+		<p class="subscription-plan-title" id="counter-title">Loading credits...</p>			
+	</div>	
+	<div style="margin-top: 30px" class="tab">
+  		<button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">Search</button>
+  		<button class="tablinks" onclick="openCity(event, 'Search')">Search Results</button>
+  		<button class="tablinks" onclick="openCity(event, 'Tokyo')" id="SchedulerList">Scheduler List</button>
+  		<button class="tablinks" onclick="openCity(event, 'Paris')">Subscriptions</button>
+  		<button class="tablinks" onclick="openCity(event, 'RFA')">RFA Rating Information</button>
+  		<button class="tablinks" onclick="openCity(event, 'Help')">User Guide/Help<sup>New</sup></button>
+      <button class="tablinks" style="color: #2da2ca;float:right;" onclick="openCity(event, 'credit')">Credit Check Extension</button>
+	</div>
+  <div id="London" class="tabcontent">
   
-    <h1>Jason's Web App Verion 1.01</h1>
+<div class="container1">
+      <div class="divL">
+		<form id="frm_search_name" >
+			<div class="row">
+				<div class="column1">
+					<label for="search-name" >Search Name</label>
+				</div>
+				<div class="column2">
+					<div class="postcode_format">	
+						<input type="text" style="width: 722px" id="search-name" name="fname-search-name" value="Prospector Search" placeholder="Name your search...">
+					</div>	
+				</div>
+			</div>
+            <div class="row">
+                <div class="column1">
+                    <label for="rating" class="first-name">SIC Sector</label>
+                </div>
+                <div class="column2">
+                    <div class="rfa-rating-option" style="width:723px" class="postcode_format"> 
+                        <select  id="multipleSelect2" class="selectpicker show-menu-arrow form-control" onchange="check_sector()" multiple>
+                        <option class="rfa_rating" value="all">ALL</option>
+                        <option class="rfa_rating" value="A">A - Agriculture, Forestry and Fishing</option>
+                        <option class="rfa_rating" value="B">B - Mining and Quarrying</option>
+                        <option class="rfa_rating" value="C">C - Manufacturing</option>
+                        <option class="rfa_rating" value="D">D - Electricity, gas, steam and air conditioning supply</option>
+                        <option class="rfa_rating" value="E">E - Water supply, sewerage, waste management and remediation activities</option>
+                        <option class="rfa_rating" value="F">F - Construction</option>
+                        <option class="rfa_rating" value="G">G - Wholesale and retail trade; repair of motor vehicles and motorcycles</option>
+                        <option class="rfa_rating" value="H">H - Transportation and storage</option>
+                        <option class="rfa_rating" value="I">I - Accommodation and food service activities</option>
+                        <option class="rfa_rating" value="J">J - Information and communication</option>
+                        <option class="rfa_rating" value="K">K - Financial and insurance activities</option>
+                        <option class="rfa_rating" value="L">L - Real estate activities</option>
+                        <option class="rfa_rating" value="M">M - Professional, scientific and technical activities</option>
+                        <option class="rfa_rating" value="N">N - Administrative and support service activities</option>
+                        <option class="rfa_rating" value="O">O - Public administration and defence; compulsory social security</option>
+                        <option class="rfa_rating" value="P">P - Education</option>
+                        <option class="rfa_rating" value="Q">Q - Human health and social work activities</option>
+                        <option class="rfa_rating" value="R">R - Arts, entertainment and recreation</option>
+                        <option class="rfa_rating" value="S">S - Other service activities</option>
+                        <option class="rfa_rating" value="T">T - Activities of households as employers; undifferentiated goods- and services-producing activities of households for own use</option>
+                        <option class="rfa_rating" value="U">U - Activities of extraterritorial organisations and bodies</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column1">
+                    <label for="sic1" class="first-name">SIC Code Description</label>
+                </div>
+                <div class="column2">
+                    <div class="postcode_format">   
+                        <input type="text" style="width: 170px" id="sic-search-name" name="fname-sic-name" value="" placeholder="filter by keyword" onchange="sic_sector()">
+                    </div>  
+                <div class="rfa-rating-option" style="width:548px" class="postcode_format"> 
+                    <select  id="multipleSelect3" class="selectpicker show-menu-arrow form-control" onchange="check_sic()" multiple>
+                    <option class="rfa_rating" value="all">ALL</option>
+                    <option class="rfa_rating" value="1110">1110 (A) - Growing of cereals (except rice), leguminous crops and oil seeds</option>
+                    <option class="rfa_rating" value="1120">1120 (A) - Growing of rice</option>
+                    <option class="rfa_rating" value="1130">1130 (A) - Growing of vegetables and melons, roots and tubers</option>
+                    <option class="rfa_rating" value="1140">1140 (A) - Growing of sugar cane</option>
+                    <option class="rfa_rating" value="1150">1150 (A) - Growing of tobacco</option>
+                    <option class="rfa_rating" value="1160">1160 (A) - Growing of fibre crops</option>
+                    <option class="rfa_rating" value="1190">1190 (A) - Growing of other non-perennial crops</option>
+                    <option class="rfa_rating" value="1210">1210 (A) - Growing of grapes</option>
+                    <option class="rfa_rating" value="1220">1220 (A) - Growing of tropical and subtropical fruits</option>
+                    <option class="rfa_rating" value="1230">1230 (A) - Growing of citrus fruits</option>
+                    <option class="rfa_rating" value="1240">1240 (A) - Growing of pome fruits and stone fruits</option>
+                    <option class="rfa_rating" value="1250">1250 (A) - Growing of other tree and bush fruits and nuts</option>
+                    <option class="rfa_rating" value="1260">1260 (A) - Growing of oleaginous fruits</option>
+                    <option class="rfa_rating" value="1270">1270 (A) - Growing of beverage crops</option>
+                    <option class="rfa_rating" value="1280">1280 (A) - Growing of spices, aromatic, drug and pharmaceutical crops</option>
+                    <option class="rfa_rating" value="1290">1290 (A) - Growing of other perennial crops</option>
+                    <option class="rfa_rating" value="1300">1300 (A) - Plant propagation</option>
+                    <option class="rfa_rating" value="1410">1410 (A) - Raising of dairy cattle</option>
+                    <option class="rfa_rating" value="1420">1420 (A) - Raising of other cattle and buffaloes</option>
+                    <option class="rfa_rating" value="1430">1430 (A) - Raising of horses and other equines</option>
+                    <option class="rfa_rating" value="1440">1440 (A) - Raising of camels and camelids</option>
+                    <option class="rfa_rating" value="1450">1450 (A) - Raising of sheep and goats</option>
+                    <option class="rfa_rating" value="1460">1460 (A) - Raising of swine/pigs</option>
+                    <option class="rfa_rating" value="1470">1470 (A) - Raising of poultry</option>
+                    <option class="rfa_rating" value="1490">1490 (A) - Raising of other animals</option>
+                    <option class="rfa_rating" value="1500">1500 (A) - Mixed farming</option>
+                    <option class="rfa_rating" value="1610">1610 (A) - Support activities for crop production</option>
+                    <option class="rfa_rating" value="1621">1621 (A) - Farm animal boarding and care</option>
+                    <option class="rfa_rating" value="1629">1629 (A) - Support activities for animal production (other than farm animal boarding and care) n.e.c.</option>
+                    <option class="rfa_rating" value="1630">1630 (A) - Post-harvest crop activities</option>
+                    <option class="rfa_rating" value="1640">1640 (A) - Seed processing for propagation</option>
+                    <option class="rfa_rating" value="1700">1700 (A) - Hunting, trapping and related service activities</option>
+                    <option class="rfa_rating" value="2100">2100 (A) - Silviculture and other forestry activities</option>
+                    <option class="rfa_rating" value="2200">2200 (A) - Logging</option>
+                    <option class="rfa_rating" value="2300">2300 (A) - Gathering of wild growing non-wood products</option>
+                    <option class="rfa_rating" value="2400">2400 (A) - Support services to forestry</option>
+                    <option class="rfa_rating" value="3110">3110 (A) - Marine fishing</option>
+                    <option class="rfa_rating" value="3120">3120 (A) - Freshwater fishing</option>
+                    <option class="rfa_rating" value="3210">3210 (A) - Marine aquaculture</option>
+                    <option class="rfa_rating" value="3220">3220 (A) - Freshwater aquaculture</option>
+                    <option class="rfa_rating" value="5101">5101 (A) - Deep coal mines</option>
+                    <option class="rfa_rating" value="5102">5102 (A) - Open cast coal working</option>
+                    <option class="rfa_rating" value="5200">5200 (A) - Mining of lignite</option>
+                    <option class="rfa_rating" value="6100">6100 (A) - Extraction of crude petroleum</option>
+                    <option class="rfa_rating" value="6200">6200 (A) - Extraction of natural gas</option>
+                    <option class="rfa_rating" value="7100">7100 (B) - Mining of iron ores</option>
+                    <option class="rfa_rating" value="7210">7210 (B) - Mining of uranium and thorium ores</option>
+                    <option class="rfa_rating" value="7290">7290 (B) - Mining of other non-ferrous metal ores</option>
+                    <option class="rfa_rating" value="8110">8110 (B) - Quarrying of ornamental and building stone, limestone, gypsum, chalk and slate</option>
+                    <option class="rfa_rating" value="8120">8120 (B) - Operation of gravel and sand pits; mining of clays and kaolin</option>
+                    <option class="rfa_rating" value="8910">8910 (B) - Mining of chemical and fertilizer minerals</option>
+                    <option class="rfa_rating" value="8920">8920 (B) - Extraction of peat</option>
+                    <option class="rfa_rating" value="8930">8930 (B) - Extraction of salt</option>
+                    <option class="rfa_rating" value="8990">8990 (B) - Other mining and quarrying n.e.c.</option>
+                    <option class="rfa_rating" value="9100">9100 (B) - Support activities for petroleum and natural gas mining</option>
+                    <option class="rfa_rating" value="9900">9900 (B) - Support activities for other mining and quarrying</option>
+                    <option class="rfa_rating" value="10110">10110 (C) - Processing and preserving of meat</option>
+                    <option class="rfa_rating" value="10120">10120 (C) - Processing and preserving of poultry meat</option>
+                    <option class="rfa_rating" value="10130">10130 (C) - Production of meat and poultry meat products</option>
+                    <option class="rfa_rating" value="10200">10200 (C) - Processing and preserving of fish, crustaceans and molluscs</option>
+                    <option class="rfa_rating" value="10310">10310 (C) - Processing and preserving of potatoes</option>
+                    <option class="rfa_rating" value="10320">10320 (C) - Manufacture of fruit and vegetable juice</option>
+                    <option class="rfa_rating" value="10390">10390 (C) - Other processing and preserving of fruit and vegetables</option>
+                    <option class="rfa_rating" value="10410">10410 (C) - Manufacture of oils and fats</option>
+                    <option class="rfa_rating" value="10420">10420 (C) - Manufacture of margarine and similar edible fats</option>
+                    <option class="rfa_rating" value="10511">10511 (C) - Liquid milk and cream production</option>
+                    <option class="rfa_rating" value="10512">10512 (C) - Butter and cheese production</option>
+                    <option class="rfa_rating" value="10519">10519 (C) - Manufacture of other milk products</option>
+                    <option class="rfa_rating" value="10520">10520 (C) - Manufacture of ice cream</option>
+                    <option class="rfa_rating" value="10611">10611 (C) - Grain milling</option>
+                    <option class="rfa_rating" value="10612">10612 (C) - Manufacture of breakfast cereals and cereals-based food</option>
+                    <option class="rfa_rating" value="10620">10620 (C) - Manufacture of starches and starch products</option>
+                    <option class="rfa_rating" value="10710">10710 (C) - Manufacture of bread; manufacture of fresh pastry goods and cakes</option>
+                    <option class="rfa_rating" value="10720">10720 (C) - Manufacture of rusks and biscuits; manufacture of preserved pastry goods and cakes</option>
+                    <option class="rfa_rating" value="10730">10730 (C) - Manufacture of macaroni, noodles, couscous and similar farinaceous products</option>
+                    <option class="rfa_rating" value="10810">10810 (C) - Manufacture of sugar</option>
+                    <option class="rfa_rating" value="10821">10821 (C) - Manufacture of cocoa and chocolate confectionery</option>
+                    <option class="rfa_rating" value="10822">10822 (C) - Manufacture of sugar confectionery</option>
+                    <option class="rfa_rating" value="10831">10831 (C) - Tea processing</option>
+                    <option class="rfa_rating" value="10832">10832 (C) - Production of coffee and coffee substitutes</option>
+                    <option class="rfa_rating" value="10840">10840 (C) - Manufacture of condiments and seasonings</option>
+                    <option class="rfa_rating" value="10850">10850 (C) - Manufacture of prepared meals and dishes</option>
+                    <option class="rfa_rating" value="10860">10860 (C) - Manufacture of homogenized food preparations and dietetic food</option>
+                    <option class="rfa_rating" value="10890">10890 (C) - Manufacture of other food products n.e.c.</option>
+                    <option class="rfa_rating" value="10910">10910 (C) - Manufacture of prepared feeds for farm animals</option>
+                    <option class="rfa_rating" value="10920">10920 (C) - Manufacture of prepared pet foods</option>
+                    <option class="rfa_rating" value="11010">11010 (C) - Distilling, rectifying and blending of spirits</option>
+                    <option class="rfa_rating" value="11020">11020 (C) - Manufacture of wine from grape</option>
+                    <option class="rfa_rating" value="11030">11030 (C) - Manufacture of cider and other fruit wines</option>
+                    <option class="rfa_rating" value="11040">11040 (C) - Manufacture of other non-distilled fermented beverages</option>
+                    <option class="rfa_rating" value="11050">11050 (C) - Manufacture of beer</option>
+                    <option class="rfa_rating" value="11060">11060 (C) - Manufacture of malt</option>
+                    <option class="rfa_rating" value="11070">11070 (C) - Manufacture of soft drinks; production of mineral waters and other bottled waters</option>
+                    <option class="rfa_rating" value="12000">12000 (C) - Manufacture of tobacco products</option>
+                    <option class="rfa_rating" value="13100">13100 (C) - Preparation and spinning of textile fibres</option>
+                    <option class="rfa_rating" value="13200">13200 (C) - Weaving of textiles</option>
+                    <option class="rfa_rating" value="13300">13300 (C) - Finishing of textiles</option>
+                    <option class="rfa_rating" value="13910">13910 (C) - Manufacture of knitted and crocheted fabrics</option>
+                    <option class="rfa_rating" value="13921">13921 (C) - Manufacture of soft furnishings</option>
+                    <option class="rfa_rating" value="13922">13922 (C) - manufacture of canvas goods, sacks, etc.</option>
+                    <option class="rfa_rating" value="13923">13923 (C) - manufacture of household textiles</option>
+                    <option class="rfa_rating" value="13931">13931 (C) - Manufacture of woven or tufted carpets and rugs</option>
+                    <option class="rfa_rating" value="13939">13939 (C) - Manufacture of other carpets and rugs</option>
+                    <option class="rfa_rating" value="13940">13940 (C) - Manufacture of cordage, rope, twine and netting</option>
+                    <option class="rfa_rating" value="13950">13950 (C) - Manufacture of non-wovens and articles made from non-wovens, except apparel</option>
+                    <option class="rfa_rating" value="13960">13960 (C) - Manufacture of other technical and industrial textiles</option>
+                    <option class="rfa_rating" value="13990">13990 (C) - Manufacture of other textiles n.e.c.</option>
+                    <option class="rfa_rating" value="14110">14110 (C) - Manufacture of leather clothes</option>
+                    <option class="rfa_rating" value="14120">14120 (C) - Manufacture of workwear</option>
+                    <option class="rfa_rating" value="14131">14131 (C) - Manufacture of other men&#39;s outerwear</option>
+                    <option class="rfa_rating" value="14132">14132 (C) - Manufacture of other women&#39;s outerwear</option>
+                    <option class="rfa_rating" value="14141">14141 (C) - Manufacture of men&#39;s underwear</option>
+                    <option class="rfa_rating" value="14142">14142 (C) - Manufacture of women&#39;s underwear</option>
+                    <option class="rfa_rating" value="14190">14190 (C) - Manufacture of other wearing apparel and accessories n.e.c.</option>
+                    <option class="rfa_rating" value="14200">14200 (C) - Manufacture of articles of fur</option>
+                    <option class="rfa_rating" value="14310">14310 (C) - Manufacture of knitted and crocheted hosiery</option>
+                    <option class="rfa_rating" value="14390">14390 (C) - Manufacture of other knitted and crocheted apparel</option>
+                    <option class="rfa_rating" value="15110">15110 (C) - Tanning and dressing of leather; dressing and dyeing of fur</option>
+                    <option class="rfa_rating" value="15120">15120 (C) - Manufacture of luggage, handbags and the like, saddlery and harness</option>
+                    <option class="rfa_rating" value="15200">15200 (C) - Manufacture of footwear</option>
+                    <option class="rfa_rating" value="16100">16100 (C) - Sawmilling and planing of wood</option>
+                    <option class="rfa_rating" value="16210">16210 (C) - Manufacture of veneer sheets and wood-based panels</option>
+                    <option class="rfa_rating" value="16220">16220 (C) - Manufacture of assembled parquet floors</option>
+                    <option class="rfa_rating" value="16230">16230 (C) - Manufacture of other builders&#39; carpentry and joinery</option>
+                    <option class="rfa_rating" value="16240">16240 (C) - Manufacture of wooden containers</option>
+                    <option class="rfa_rating" value="16290">16290 (C) - Manufacture of other products of wood; manufacture of articles of cork, straw and plaiting materials</option>
+                    <option class="rfa_rating" value="17110">17110 (C) - Manufacture of pulp</option>
+                    <option class="rfa_rating" value="17120">17120 (C) - Manufacture of paper and paperboard</option>
+                    <option class="rfa_rating" value="17211">17211 (C) - Manufacture of corrugated paper and paperboard, sacks and bags</option>
+                    <option class="rfa_rating" value="17219">17219 (C) - Manufacture of other paper and paperboard containers</option>
+                    <option class="rfa_rating" value="17220">17220 (C) - Manufacture of household and sanitary goods and of toilet requisites</option>
+                    <option class="rfa_rating" value="17230">17230 (C) - Manufacture of paper stationery</option>
+                    <option class="rfa_rating" value="17240">17240 (C) - Manufacture of wallpaper</option>
+                    <option class="rfa_rating" value="17290">17290 (C) - Manufacture of other articles of paper and paperboard n.e.c.</option>
+                    <option class="rfa_rating" value="18110">18110 (C) - Printing of newspapers</option>
+                    <option class="rfa_rating" value="18121">18121 (C) - Manufacture of printed labels</option>
+                    <option class="rfa_rating" value="18129">18129 (C) - Printing n.e.c.</option>
+                    <option class="rfa_rating" value="18130">18130 (C) - Pre-press and pre-media services</option>
+                    <option class="rfa_rating" value="18140">18140 (C) - Binding and related services</option>
+                    <option class="rfa_rating" value="18201">18201 (C) - Reproduction of sound recording</option>
+                    <option class="rfa_rating" value="18202">18202 (C) - Reproduction of video recording</option>
+                    <option class="rfa_rating" value="18203">18203 (C) - Reproduction of computer media</option>
+                    <option class="rfa_rating" value="19100">19100 (C) - Manufacture of coke oven products</option>
+                    <option class="rfa_rating" value="19201">19201 (C) - Mineral oil refining</option>
+                    <option class="rfa_rating" value="19209">19209 (C) - Other treatment of petroleum products (excluding petrochemicals manufacture)</option>
+                    <option class="rfa_rating" value="20110">20110 (C) - Manufacture of industrial gases</option>
+                    <option class="rfa_rating" value="20120">20120 (C) - Manufacture of dyes and pigments</option>
+                    <option class="rfa_rating" value="20130">20130 (C) - Manufacture of other inorganic basic chemicals</option>
+                    <option class="rfa_rating" value="20140">20140 (C) - Manufacture of other organic basic chemicals</option>
+                    <option class="rfa_rating" value="20150">20150 (C) - Manufacture of fertilizers and nitrogen compounds</option>
+                    <option class="rfa_rating" value="20160">20160 (C) - Manufacture of plastics in primary forms</option>
+                    <option class="rfa_rating" value="20170">20170 (C) - Manufacture of synthetic rubber in primary forms</option>
+                    <option class="rfa_rating" value="20200">20200 (C) - Manufacture of pesticides and other agrochemical products</option>
+                    <option class="rfa_rating" value="20301">20301 (C) - Manufacture of paints, varnishes and similar coatings, mastics and sealants</option>
+                    <option class="rfa_rating" value="20302">20302 (C) - Manufacture of printing ink</option>
+                    <option class="rfa_rating" value="20411">20411 (C) - Manufacture of soap and detergents</option>
+                    <option class="rfa_rating" value="20412">20412 (C) - Manufacture of cleaning and polishing preparations</option>
+                    <option class="rfa_rating" value="20420">20420 (C) - Manufacture of perfumes and toilet preparations</option>
+                    <option class="rfa_rating" value="20510">20510 (C) - Manufacture of explosives</option>
+                    <option class="rfa_rating" value="20520">20520 (C) - Manufacture of glues</option>
+                    <option class="rfa_rating" value="20530">20530 (C) - Manufacture of essential oils</option>
+                    <option class="rfa_rating" value="20590">20590 (C) - Manufacture of other chemical products n.e.c.</option>
+                    <option class="rfa_rating" value="20600">20600 (C) - Manufacture of man-made fibres</option>
+                    <option class="rfa_rating" value="21100">21100 (C) - Manufacture of basic pharmaceutical products</option>
+                    <option class="rfa_rating" value="21200">21200 (C) - Manufacture of pharmaceutical preparations</option>
+                    <option class="rfa_rating" value="22110">22110 (C) - Manufacture of rubber tyres and tubes; retreading and rebuilding of rubber tyres</option>
+                    <option class="rfa_rating" value="22190">22190 (C) - Manufacture of other rubber products</option>
+                    <option class="rfa_rating" value="22210">22210 (C) - Manufacture of plastic plates, sheets, tubes and profiles</option>
+                    <option class="rfa_rating" value="22220">22220 (C) - Manufacture of plastic packing goods</option>
+                    <option class="rfa_rating" value="22230">22230 (C) - Manufacture of builders ware of plastic</option>
+                    <option class="rfa_rating" value="22290">22290 (C) - Manufacture of other plastic products</option>
+                    <option class="rfa_rating" value="23110">23110 (C) - Manufacture of flat glass</option>
+                    <option class="rfa_rating" value="23120">23120 (C) - Shaping and processing of flat glass</option>
+                    <option class="rfa_rating" value="23130">23130 (C) - Manufacture of hollow glass</option>
+                    <option class="rfa_rating" value="23140">23140 (C) - Manufacture of glass fibres</option>
+                    <option class="rfa_rating" value="23190">23190 (C) - Manufacture and processing of other glass, including technical glassware</option>
+                    <option class="rfa_rating" value="23200">23200 (C) - Manufacture of refractory products</option>
+                    <option class="rfa_rating" value="23310">23310 (C) - Manufacture of ceramic tiles and flags</option>
+                    <option class="rfa_rating" value="23320">23320 (C) - Manufacture of bricks, tiles and construction products, in baked clay</option>
+                    <option class="rfa_rating" value="23410">23410 (C) - Manufacture of ceramic household and ornamental articles</option>
+                    <option class="rfa_rating" value="23420">23420 (C) - Manufacture of ceramic sanitary fixtures</option>
+                    <option class="rfa_rating" value="23430">23430 (C) - Manufacture of ceramic insulators and insulating fittings</option>
+                    <option class="rfa_rating" value="23440">23440 (C) - Manufacture of other technical ceramic products</option>
+                    <option class="rfa_rating" value="23490">23490 (C) - Manufacture of other ceramic products n.e.c.</option>
+                    <option class="rfa_rating" value="23510">23510 (C) - Manufacture of cement</option>
+                    <option class="rfa_rating" value="23520">23520 (C) - Manufacture of lime and plaster</option>
+                    <option class="rfa_rating" value="23610">23610 (C) - Manufacture of concrete products for construction purposes</option>
+                    <option class="rfa_rating" value="23620">23620 (C) - Manufacture of plaster products for construction purposes</option>
+                    <option class="rfa_rating" value="23630">23630 (C) - Manufacture of ready-mixed concrete</option>
+                    <option class="rfa_rating" value="23640">23640 (C) - Manufacture of mortars</option>
+                    <option class="rfa_rating" value="23650">23650 (C) - Manufacture of fibre cement</option>
+                    <option class="rfa_rating" value="23690">23690 (C) - Manufacture of other articles of concrete, plaster and cement</option>
+                    <option class="rfa_rating" value="23700">23700 (C) - Cutting, shaping and finishing of stone</option>
+                    <option class="rfa_rating" value="23910">23910 (C) - Production of abrasive products</option>
+                    <option class="rfa_rating" value="23990">23990 (C) - Manufacture of other non-metallic mineral products n.e.c.</option>
+                    <option class="rfa_rating" value="24100">24100 (C) - Manufacture of basic iron and steel and of ferro-alloys</option>
+                    <option class="rfa_rating" value="24200">24200 (C) - Manufacture of tubes, pipes, hollow profiles and related fittings, of steel</option>
+                    <option class="rfa_rating" value="24310">24310 (C) - Cold drawing of bars</option>
+                    <option class="rfa_rating" value="24320">24320 (C) - Cold rolling of narrow strip</option>
+                    <option class="rfa_rating" value="24330">24330 (C) - Cold forming or folding</option>
+                    <option class="rfa_rating" value="24340">24340 (C) - Cold drawing of wire</option>
+                    <option class="rfa_rating" value="24410">24410 (C) - Precious metals production</option>
+                    <option class="rfa_rating" value="24420">24420 (C) - Aluminium production</option>
+                    <option class="rfa_rating" value="24430">24430 (C) - Lead, zinc and tin production</option>
+                    <option class="rfa_rating" value="24440">24440 (C) - Copper production</option>
+                    <option class="rfa_rating" value="24450">24450 (C) - Other non-ferrous metal production</option>
+                    <option class="rfa_rating" value="24460">24460 (C) - Processing of nuclear fuel</option>
+                    <option class="rfa_rating" value="24510">24510 (C) - Casting of iron</option>
+                    <option class="rfa_rating" value="24520">24520 (C) - Casting of steel</option>
+                    <option class="rfa_rating" value="24530">24530 (C) - Casting of light metals</option>
+                    <option class="rfa_rating" value="24540">24540 (C) - Casting of other non-ferrous metals</option>
+                    <option class="rfa_rating" value="25110">25110 (C) - Manufacture of metal structures and parts of structures</option>
+                    <option class="rfa_rating" value="25120">25120 (C) - Manufacture of doors and windows of metal</option>
+                    <option class="rfa_rating" value="25210">25210 (C) - Manufacture of central heating radiators and boilers</option>
+                    <option class="rfa_rating" value="25290">25290 (C) - Manufacture of other tanks, reservoirs and containers of metal</option>
+                    <option class="rfa_rating" value="25300">25300 (C) - Manufacture of steam generators, except central heating hot water boilers</option>
+                    <option class="rfa_rating" value="25400">25400 (C) - Manufacture of weapons and ammunition</option>
+                    <option class="rfa_rating" value="25500">25500 (C) - Forging, pressing, stamping and roll-forming of metal; powder metallurgy</option>
+                    <option class="rfa_rating" value="25610">25610 (C) - Treatment and coating of metals</option>
+                    <option class="rfa_rating" value="25620">25620 (C) - Machining</option>
+                    <option class="rfa_rating" value="25710">25710 (C) - Manufacture of cutlery</option>
+                    <option class="rfa_rating" value="25720">25720 (C) - Manufacture of locks and hinges</option>
+                    <option class="rfa_rating" value="25730">25730 (C) - Manufacture of tools</option>
+                    <option class="rfa_rating" value="25910">25910 (C) - Manufacture of steel drums and similar containers</option>
+                    <option class="rfa_rating" value="25920">25920 (C) - Manufacture of light metal packaging</option>
+                    <option class="rfa_rating" value="25930">25930 (C) - Manufacture of wire products, chain and springs</option>
+                    <option class="rfa_rating" value="25940">25940 (C) - Manufacture of fasteners and screw machine products</option>
+                    <option class="rfa_rating" value="25990">25990 (C) - Manufacture of other fabricated metal products n.e.c.</option>
+                    <option class="rfa_rating" value="26110">26110 (C) - Manufacture of electronic components</option>
+                    <option class="rfa_rating" value="26120">26120 (C) - Manufacture of loaded electronic boards</option>
+                    <option class="rfa_rating" value="26200">26200 (C) - Manufacture of computers and peripheral equipment</option>
+                    <option class="rfa_rating" value="26301">26301 (C) - Manufacture of telegraph and telephone apparatus and equipment</option>
+                    <option class="rfa_rating" value="26309">26309 (C) - Manufacture of communication equipment other than telegraph, and telephone apparatus and equipment</option>
+                    <option class="rfa_rating" value="26400">26400 (C) - Manufacture of consumer electronics</option>
+                    <option class="rfa_rating" value="26511">26511 (C) - Manufacture of electronic measuring, testing etc. equipment, not for industrial process control</option>
+                    <option class="rfa_rating" value="26512">26512 (C) - Manufacture of electronic industrial process control equipment</option>
+                    <option class="rfa_rating" value="26513">26513 (C) - Manufacture of non-electronic measuring, testing etc. equipment, not for industrial process control</option>
+                    <option class="rfa_rating" value="26514">26514 (C) - Manufacture of non-electronic industrial process control equipment</option>
+                    <option class="rfa_rating" value="26520">26520 (C) - Manufacture of watches and clocks</option>
+                    <option class="rfa_rating" value="26600">26600 (C) - Manufacture of irradiation, electromedical and electrotherapeutic equipment</option>
+                    <option class="rfa_rating" value="26701">26701 (C) - Manufacture of optical precision instruments</option>
+                    <option class="rfa_rating" value="26702">26702 (C) - Manufacture of photographic and cinematographic equipment</option>
+                    <option class="rfa_rating" value="26800">26800 (C) - Manufacture of magnetic and optical media</option>
+                    <option class="rfa_rating" value="27110">27110 (C) - Manufacture of electric motors, generators and transformers</option>
+                    <option class="rfa_rating" value="27120">27120 (C) - Manufacture of electricity distribution and control apparatus</option>
+                    <option class="rfa_rating" value="27200">27200 (C) - Manufacture of batteries and accumulators</option>
+                    <option class="rfa_rating" value="27310">27310 (C) - Manufacture of fibre optic cables</option>
+                    <option class="rfa_rating" value="27320">27320 (C) - Manufacture of other electronic and electric wires and cables</option>
+                    <option class="rfa_rating" value="27330">27330 (C) - Manufacture of wiring devices</option>
+                    <option class="rfa_rating" value="27400">27400 (C) - Manufacture of electric lighting equipment</option>
+                    <option class="rfa_rating" value="27510">27510 (C) - Manufacture of electric domestic appliances</option>
+                    <option class="rfa_rating" value="27520">27520 (C) - Manufacture of non-electric domestic appliances</option>
+                    <option class="rfa_rating" value="27900">27900 (C) - Manufacture of other electrical equipment</option>
+                    <option class="rfa_rating" value="28110">28110 (C) - Manufacture of engines and turbines, except aircraft, vehicle and cycle engines</option>
+                    <option class="rfa_rating" value="28120">28120 (C) - Manufacture of fluid power equipment</option>
+                    <option class="rfa_rating" value="28131">28131 (C) - Manufacture of pumps</option>
+                    <option class="rfa_rating" value="28132">28132 (C) - Manufacture of compressors</option>
+                    <option class="rfa_rating" value="28140">28140 (C) - Manufacture of taps and valves</option>
+                    <option class="rfa_rating" value="28150">28150 (C) - Manufacture of bearings, gears, gearing and driving elements</option>
+                    <option class="rfa_rating" value="28210">28210 (C) - Manufacture of ovens, furnaces and furnace burners</option>
+                    <option class="rfa_rating" value="28220">28220 (C) - Manufacture of lifting and handling equipment</option>
+                    <option class="rfa_rating" value="28230">28230 (C) - Manufacture of office machinery and equipment (except computers and peripheral equipment)</option>
+                    <option class="rfa_rating" value="28240">28240 (C) - Manufacture of power-driven hand tools</option>
+                    <option class="rfa_rating" value="28250">28250 (C) - Manufacture of non-domestic cooling and ventilation equipment</option>
+                    <option class="rfa_rating" value="28290">28290 (C) - Manufacture of other general-purpose machinery n.e.c.</option>
+                    <option class="rfa_rating" value="28301">28301 (C) - Manufacture of agricultural tractors</option>
+                    <option class="rfa_rating" value="28302">28302 (C) - Manufacture of agricultural and forestry machinery other than tractors</option>
+                    <option class="rfa_rating" value="28410">28410 (C) - Manufacture of metal forming machinery</option>
+                    <option class="rfa_rating" value="28490">28490 (C) - Manufacture of other machine tools</option>
+                    <option class="rfa_rating" value="28910">28910 (C) - Manufacture of machinery for metallurgy</option>
+                    <option class="rfa_rating" value="28921">28921 (C) - Manufacture of machinery for mining</option>
+                    <option class="rfa_rating" value="28922">28922 (C) - Manufacture of earthmoving equipment</option>
+                    <option class="rfa_rating" value="28923">28923 (C) - Manufacture of equipment for concrete crushing and screening and roadworks</option>
+                    <option class="rfa_rating" value="28930">28930 (C) - Manufacture of machinery for food, beverage and tobacco processing</option>
+                    <option class="rfa_rating" value="28940">28940 (C) - Manufacture of machinery for textile, apparel and leather production</option>
+                    <option class="rfa_rating" value="28950">28950 (C) - Manufacture of machinery for paper and paperboard production</option>
+                    <option class="rfa_rating" value="28960">28960 (C) - Manufacture of plastics and rubber machinery</option>
+                    <option class="rfa_rating" value="28990">28990 (C) - Manufacture of other special-purpose machinery n.e.c.</option>
+                    <option class="rfa_rating" value="29100">29100 (C) - Manufacture of motor vehicles</option>
+                    <option class="rfa_rating" value="29201">29201 (C) - Manufacture of bodies (coachwork) for motor vehicles (except caravans)</option>
+                    <option class="rfa_rating" value="29202">29202 (C) - Manufacture of trailers and semi-trailers</option>
+                    <option class="rfa_rating" value="29203">29203 (C) - Manufacture of caravans</option>
+                    <option class="rfa_rating" value="29310">29310 (C) - Manufacture of electrical and electronic equipment for motor vehicles and their engines</option>
+                    <option class="rfa_rating" value="29320">29320 (C) - Manufacture of other parts and accessories for motor vehicles</option>
+                    <option class="rfa_rating" value="30110">30110 (C) - Building of ships and floating structures</option>
+                    <option class="rfa_rating" value="30120">30120 (C) - Building of pleasure and sporting boats</option>
+                    <option class="rfa_rating" value="30200">30200 (C) - Manufacture of railway locomotives and rolling stock</option>
+                    <option class="rfa_rating" value="30300">30300 (C) - Manufacture of air and spacecraft and related machinery</option>
+                    <option class="rfa_rating" value="30400">30400 (C) - Manufacture of military fighting vehicles</option>
+                    <option class="rfa_rating" value="30910">30910 (C) - Manufacture of motorcycles</option>
+                    <option class="rfa_rating" value="30920">30920 (C) - Manufacture of bicycles and invalid carriages</option>
+                    <option class="rfa_rating" value="30990">30990 (C) - Manufacture of other transport equipment n.e.c.</option>
+                    <option class="rfa_rating" value="31010">31010 (C) - Manufacture of office and shop furniture</option>
+                    <option class="rfa_rating" value="31020">31020 (C) - Manufacture of kitchen furniture</option>
+                    <option class="rfa_rating" value="31030">31030 (C) - Manufacture of mattresses</option>
+                    <option class="rfa_rating" value="31090">31090 (C) - Manufacture of other furniture</option>
+                    <option class="rfa_rating" value="32110">32110 (C) - Striking of coins</option>
+                    <option class="rfa_rating" value="32120">32120 (C) - Manufacture of jewellery and related articles</option>
+                    <option class="rfa_rating" value="32130">32130 (C) - Manufacture of imitation jewellery and related articles</option>
+                    <option class="rfa_rating" value="32200">32200 (C) - Manufacture of musical instruments</option>
+                    <option class="rfa_rating" value="32300">32300 (C) - Manufacture of sports goods</option>
+                    <option class="rfa_rating" value="32401">32401 (C) - Manufacture of professional and arcade games and toys</option>
+                    <option class="rfa_rating" value="32409">32409 (C) - Manufacture of other games and toys, n.e.c.</option>
+                    <option class="rfa_rating" value="32500">32500 (C) - Manufacture of medical and dental instruments and supplies</option>
+                    <option class="rfa_rating" value="32910">32910 (C) - Manufacture of brooms and brushes</option>
+                    <option class="rfa_rating" value="32990">32990 (C) - Other manufacturing n.e.c.</option>
+                    <option class="rfa_rating" value="33110">33110 (C) - Repair of fabricated metal products</option>
+                    <option class="rfa_rating" value="33120">33120 (C) - Repair of machinery</option>
+                    <option class="rfa_rating" value="33130">33130 (C) - Repair of electronic and optical equipment</option>
+                    <option class="rfa_rating" value="33140">33140 (C) - Repair of electrical equipment</option>
+                    <option class="rfa_rating" value="33150">33150 (C) - Repair and maintenance of ships and boats</option>
+                    <option class="rfa_rating" value="33160">33160 (C) - Repair and maintenance of aircraft and spacecraft</option>
+                    <option class="rfa_rating" value="33170">33170 (C) - Repair and maintenance of other transport equipment n.e.c.</option>
+                    <option class="rfa_rating" value="33190">33190 (C) - Repair of other equipment</option>
+                    <option class="rfa_rating" value="33200">33200 (C) - Installation of industrial machinery and equipment</option>
+                    <option class="rfa_rating" value="35110">35110 (D) - Production of electricity</option>
+                    <option class="rfa_rating" value="35120">35120 (D) - Transmission of electricity</option>
+                    <option class="rfa_rating" value="35130">35130 (D) - Distribution of electricity</option>
+                    <option class="rfa_rating" value="35140">35140 (D) - Trade of electricity</option>
+                    <option class="rfa_rating" value="35210">35210 (D) - Manufacture of gas</option>
+                    <option class="rfa_rating" value="35220">35220 (D) - Distribution of gaseous fuels through mains</option>
+                    <option class="rfa_rating" value="35230">35230 (D) - Trade of gas through mains</option>
+                    <option class="rfa_rating" value="35300">35300 (D) - Steam and air conditioning supply</option>
+                    <option class="rfa_rating" value="36000">36000 (E) - Water collection, treatment and supply</option>
+                    <option class="rfa_rating" value="37000">37000 (E) - Sewerage</option>
+                    <option class="rfa_rating" value="38110">38110 (E) - Collection of non-hazardous waste</option>
+                    <option class="rfa_rating" value="38120">38120 (E) - Collection of hazardous waste</option>
+                    <option class="rfa_rating" value="38210">38210 (E) - Treatment and disposal of non-hazardous waste</option>
+                    <option class="rfa_rating" value="38220">38220 (E) - Treatment and disposal of hazardous waste</option>
+                    <option class="rfa_rating" value="38310">38310 (E) - Dismantling of wrecks</option>
+                    <option class="rfa_rating" value="38320">38320 (E) - Recovery of sorted materials</option>
+                    <option class="rfa_rating" value="39000">39000 (E) - Remediation activities and other waste management services</option>
+                    <option class="rfa_rating" value="41100">41100 (F) - Development of building projects</option>
+                    <option class="rfa_rating" value="41201">41201 (F) - Construction of commercial buildings</option>
+                    <option class="rfa_rating" value="41202">41202 (F) - Construction of domestic buildings</option>
+                    <option class="rfa_rating" value="42110">42110 (F) - Construction of roads and motorways</option>
+                    <option class="rfa_rating" value="42120">42120 (F) - Construction of railways and underground railways</option>
+                    <option class="rfa_rating" value="42130">42130 (F) - Construction of bridges and tunnels</option>
+                    <option class="rfa_rating" value="42210">42210 (F) - Construction of utility projects for fluids</option>
+                    <option class="rfa_rating" value="42220">42220 (F) - Construction of utility projects for electricity and telecommunications</option>
+                    <option class="rfa_rating" value="42910">42910 (F) - Construction of water projects</option>
+                    <option class="rfa_rating" value="42990">42990 (F) - Construction of other civil engineering projects n.e.c.</option>
+                    <option class="rfa_rating" value="43110">43110 (F) - Demolition</option>
+                    <option class="rfa_rating" value="43120">43120 (F) - Site preparation</option>
+                    <option class="rfa_rating" value="43130">43130 (F) - Test drilling and boring</option>
+                    <option class="rfa_rating" value="43210">43210 (F) - Electrical installation</option>
+                    <option class="rfa_rating" value="43220">43220 (F) - Plumbing, heat and air-conditioning installation</option>
+                    <option class="rfa_rating" value="43290">43290 (F) - Other construction installation</option>
+                    <option class="rfa_rating" value="43310">43310 (F) - Plastering</option>
+                    <option class="rfa_rating" value="43320">43320 (F) - Joinery installation</option>
+                    <option class="rfa_rating" value="43330">43330 (F) - Floor and wall covering</option>
+                    <option class="rfa_rating" value="43341">43341 (F) - Painting</option>
+                    <option class="rfa_rating" value="43342">43342 (F) - Glazing</option>
+                    <option class="rfa_rating" value="43390">43390 (F) - Other building completion and finishing</option>
+                    <option class="rfa_rating" value="43910">43910 (F) - Roofing activities</option>
+                    <option class="rfa_rating" value="43991">43991 (F) - Scaffold erection</option>
+                    <option class="rfa_rating" value="43999">43999 (F) - Other specialised construction activities n.e.c.</option>
+                    <option class="rfa_rating" value="45111">45111 (G) - Sale of new cars and light motor vehicles</option>
+                    <option class="rfa_rating" value="45112">45112 (G) - Sale of used cars and light motor vehicles</option>
+                    <option class="rfa_rating" value="45190">45190 (G) - Sale of other motor vehicles</option>
+                    <option class="rfa_rating" value="45200">45200 (G) - Maintenance and repair of motor vehicles</option>
+                    <option class="rfa_rating" value="45310">45310 (G) - Wholesale trade of motor vehicle parts and accessories</option>
+                    <option class="rfa_rating" value="45320">45320 (G) - Retail trade of motor vehicle parts and accessories</option>
+                    <option class="rfa_rating" value="45400">45400 (G) - Sale, maintenance and repair of motorcycles and related parts and accessories</option>
+                    <option class="rfa_rating" value="46110">46110 (G) - Agents selling agricultural raw materials, livestock, textile raw materials and semi-finished goods</option>
+                    <option class="rfa_rating" value="46120">46120 (G) - Agents involved in the sale of fuels, ores, metals and industrial chemicals</option>
+                    <option class="rfa_rating" value="46130">46130 (G) - Agents involved in the sale of timber and building materials</option>
+                    <option class="rfa_rating" value="46140">46140 (G) - Agents involved in the sale of machinery, industrial equipment, ships and aircraft</option>
+                    <option class="rfa_rating" value="46150">46150 (G) - Agents involved in the sale of furniture, household goods, hardware and ironmongery</option>
+                    <option class="rfa_rating" value="46160">46160 (G) - Agents involved in the sale of textiles, clothing, fur, footwear and leather goods</option>
+                    <option class="rfa_rating" value="46170">46170 (G) - Agents involved in the sale of food, beverages and tobacco</option>
+                    <option class="rfa_rating" value="46180">46180 (G) - Agents specialised in the sale of other particular products</option>
+                    <option class="rfa_rating" value="46190">46190 (G) - Agents involved in the sale of a variety of goods</option>
+                    <option class="rfa_rating" value="46210">46210 (G) - Wholesale of grain, unmanufactured tobacco, seeds and animal feeds</option>
+                    <option class="rfa_rating" value="46220">46220 (G) - Wholesale of flowers and plants</option>
+                    <option class="rfa_rating" value="46230">46230 (G) - Wholesale of live animals</option>
+                    <option class="rfa_rating" value="46240">46240 (G) - Wholesale of hides, skins and leather</option>
+                    <option class="rfa_rating" value="46310">46310 (G) - Wholesale of fruit and vegetables</option>
+                    <option class="rfa_rating" value="46320">46320 (G) - Wholesale of meat and meat products</option>
+                    <option class="rfa_rating" value="46330">46330 (G) - Wholesale of dairy products, eggs and edible oils and fats</option>
+                    <option class="rfa_rating" value="46341">46341 (G) - Wholesale of fruit and vegetable juices, mineral water and soft drinks</option>
+                    <option class="rfa_rating" value="46342">46342 (G) - Wholesale of wine, beer, spirits and other alcoholic beverages</option>
+                    <option class="rfa_rating" value="46350">46350 (G) - Wholesale of tobacco products</option>
+                    <option class="rfa_rating" value="46360">46360 (G) - Wholesale of sugar and chocolate and sugar confectionery</option>
+                    <option class="rfa_rating" value="46370">46370 (G) - Wholesale of coffee, tea, cocoa and spices</option>
+                    <option class="rfa_rating" value="46380">46380 (G) - Wholesale of other food, including fish, crustaceans and molluscs</option>
+                    <option class="rfa_rating" value="46390">46390 (G) - Non-specialised wholesale of food, beverages and tobacco</option>
+                    <option class="rfa_rating" value="46410">46410 (G) - Wholesale of textiles</option>
+                    <option class="rfa_rating" value="46420">46420 (G) - Wholesale of clothing and footwear</option>
+                    <option class="rfa_rating" value="46431">46431 (G) - Wholesale of audio tapes, records, CDs and video tapes and the equipment on which these are played</option>
+                    <option class="rfa_rating" value="46439">46439 (G) - Wholesale of radio, television goods &amp; electrical household appliances (other than records, tapes, CD&#39;s &amp; video tapes and the equipment used for playi</option>
+                    <option class="rfa_rating" value="46440">46440 (G) - Wholesale of china and glassware and cleaning materials</option>
+                    <option class="rfa_rating" value="46450">46450 (G) - Wholesale of perfume and cosmetics</option>
+                    <option class="rfa_rating" value="46460">46460 (G) - Wholesale of pharmaceutical goods</option>
+                    <option class="rfa_rating" value="46470">46470 (G) - Wholesale of furniture, carpets and lighting equipment</option>
+                    <option class="rfa_rating" value="46480">46480 (G) - Wholesale of watches and jewellery</option>
+                    <option class="rfa_rating" value="46491">46491 (G) - Wholesale of musical instruments</option>
+                    <option class="rfa_rating" value="46499">46499 (G) - Wholesale of household goods (other than musical instruments) n.e.c</option>
+                    <option class="rfa_rating" value="46510">46510 (G) - Wholesale of computers, computer peripheral equipment and software</option>
+                    <option class="rfa_rating" value="46520">46520 (G) - Wholesale of electronic and telecommunications equipment and parts</option>
+                    <option class="rfa_rating" value="46610">46610 (G) - Wholesale of agricultural machinery, equipment and supplies</option>
+                    <option class="rfa_rating" value="46620">46620 (G) - Wholesale of machine tools</option>
+                    <option class="rfa_rating" value="46630">46630 (G) - Wholesale of mining, construction and civil engineering machinery</option>
+                    <option class="rfa_rating" value="46640">46640 (G) - Wholesale of machinery for the textile industry and of sewing and knitting machines</option>
+                    <option class="rfa_rating" value="46650">46650 (G) - Wholesale of office furniture</option>
+                    <option class="rfa_rating" value="46660">46660 (G) - Wholesale of other office machinery and equipment</option>
+                    <option class="rfa_rating" value="46690">46690 (G) - Wholesale of other machinery and equipment</option>
+                    <option class="rfa_rating" value="46711">46711 (G) - Wholesale of petroleum and petroleum products</option>
+                    <option class="rfa_rating" value="46719">46719 (G) - Wholesale of other fuels and related products</option>
+                    <option class="rfa_rating" value="46720">46720 (G) - Wholesale of metals and metal ores</option>
+                    <option class="rfa_rating" value="46730">46730 (G) - Wholesale of wood, construction materials and sanitary equipment</option>
+                    <option class="rfa_rating" value="46740">46740 (G) - Wholesale of hardware, plumbing and heating equipment and supplies</option>
+                    <option class="rfa_rating" value="46750">46750 (G) - Wholesale of chemical products</option>
+                    <option class="rfa_rating" value="46760">46760 (G) - Wholesale of other intermediate products</option>
+                    <option class="rfa_rating" value="46770">46770 (G) - Wholesale of waste and scrap</option>
+                    <option class="rfa_rating" value="46900">46900 (G) - Non-specialised wholesale trade</option>
+                    <option class="rfa_rating" value="47110">47110 (G) - Retail sale in non-specialised stores with food, beverages or tobacco predominating</option>
+                    <option class="rfa_rating" value="47190">47190 (G) - Other retail sale in non-specialised stores</option>
+                    <option class="rfa_rating" value="47210">47210 (G) - Retail sale of fruit and vegetables in specialised stores</option>
+                    <option class="rfa_rating" value="47220">47220 (G) - Retail sale of meat and meat products in specialised stores</option>
+                    <option class="rfa_rating" value="47230">47230 (G) - Retail sale of fish, crustaceans and molluscs in specialised stores</option>
+                    <option class="rfa_rating" value="47240">47240 (G) - Retail sale of bread, cakes, flour confectionery and sugar confectionery in specialised stores</option>
+                    <option class="rfa_rating" value="47250">47250 (G) - Retail sale of beverages in specialised stores</option>
+                    <option class="rfa_rating" value="47260">47260 (G) - Retail sale of tobacco products in specialised stores</option>
+                    <option class="rfa_rating" value="47290">47290 (G) - Other retail sale of food in specialised stores</option>
+                    <option class="rfa_rating" value="47300">47300 (G) - Retail sale of automotive fuel in specialised stores</option>
+                    <option class="rfa_rating" value="47410">47410 (G) - Retail sale of computers, peripheral units and software in specialised stores</option>
+                    <option class="rfa_rating" value="47421">47421 (G) - Retail sale of mobile telephones</option>
+                    <option class="rfa_rating" value="47429">47429 (G) - Retail sale of telecommunications equipment other than mobile telephones</option>
+                    <option class="rfa_rating" value="47430">47430 (G) - Retail sale of audio and video equipment in specialised stores</option>
+                    <option class="rfa_rating" value="47510">47510 (G) - Retail sale of textiles in specialised stores</option>
+                    <option class="rfa_rating" value="47520">47520 (G) - Retail sale of hardware, paints and glass in specialised stores</option>
+                    <option class="rfa_rating" value="47530">47530 (G) - Retail sale of carpets, rugs, wall and floor coverings in specialised stores</option>
+                    <option class="rfa_rating" value="47540">47540 (G) - Retail sale of electrical household appliances in specialised stores</option>
+                    <option class="rfa_rating" value="47591">47591 (G) - Retail sale of musical instruments and scores</option>
+                    <option class="rfa_rating" value="47599">47599 (G) - Retail of furniture, lighting, and similar (not musical instruments or scores) in specialised store</option>
+                    <option class="rfa_rating" value="47610">47610 (G) - Retail sale of books in specialised stores</option>
+                    <option class="rfa_rating" value="47620">47620 (G) - Retail sale of newspapers and stationery in specialised stores</option>
+                    <option class="rfa_rating" value="47630">47630 (G) - Retail sale of music and video recordings in specialised stores</option>
+                    <option class="rfa_rating" value="47640">47640 (G) - Retail sale of sports goods, fishing gear, camping goods, boats and bicycles</option>
+                    <option class="rfa_rating" value="47650">47650 (G) - Retail sale of games and toys in specialised stores</option>
+                    <option class="rfa_rating" value="47710">47710 (G) - Retail sale of clothing in specialised stores</option>
+                    <option class="rfa_rating" value="47721">47721 (G) - Retail sale of footwear in specialised stores</option>
+                    <option class="rfa_rating" value="47722">47722 (G) - Retail sale of leather goods in specialised stores</option>
+                    <option class="rfa_rating" value="47730">47730 (G) - Dispensing chemist in specialised stores</option>
+                    <option class="rfa_rating" value="47741">47741 (G) - Retail sale of hearing aids</option>
+                    <option class="rfa_rating" value="47749">47749 (G) - Retail sale of medical and orthopaedic goods in specialised stores (not incl. hearing aids) n.e.c.</option>
+                    <option class="rfa_rating" value="47750">47750 (G) - Retail sale of cosmetic and toilet articles in specialised stores</option>
+                    <option class="rfa_rating" value="47760">47760 (G) - Retail sale of flowers, plants, seeds, fertilizers, pet animals and pet food in specialised stores</option>
+                    <option class="rfa_rating" value="47770">47770 (G) - Retail sale of watches and jewellery in specialised stores</option>
+                    <option class="rfa_rating" value="47781">47781 (G) - Retail sale in commercial art galleries</option>
+                    <option class="rfa_rating" value="47782">47782 (G) - Retail sale by opticians</option>
+                    <option class="rfa_rating" value="47789">47789 (G) - Other retail sale of new goods in specialised stores (not commercial art galleries and opticians)</option>
+                    <option class="rfa_rating" value="47791">47791 (G) - Retail sale of antiques including antique books in stores</option>
+                    <option class="rfa_rating" value="47799">47799 (G) - Retail sale of other second-hand goods in stores (not incl. antiques)</option>
+                    <option class="rfa_rating" value="47810">47810 (G) - Retail sale via stalls and markets of food, beverages and tobacco products</option>
+                    <option class="rfa_rating" value="47820">47820 (G) - Retail sale via stalls and markets of textiles, clothing and footwear</option>
+                    <option class="rfa_rating" value="47890">47890 (G) - Retail sale via stalls and markets of other goods</option>
+                    <option class="rfa_rating" value="47910">47910 (G) - Retail sale via mail order houses or via Internet</option>
+                    <option class="rfa_rating" value="47990">47990 (G) - Other retail sale not in stores, stalls or markets</option>
+                    <option class="rfa_rating" value="49100">49100 (H) - Passenger rail transport, interurban</option>
+                    <option class="rfa_rating" value="49200">49200 (H) - Freight rail transport</option>
+                    <option class="rfa_rating" value="49311">49311 (H) - Urban and suburban passenger railway transportation by underground, metro and similar systems</option>
+                    <option class="rfa_rating" value="49319">49319 (H) - Other urban, suburban or metropolitan passenger land transport (not underground, metro or similar)</option>
+                    <option class="rfa_rating" value="49320">49320 (H) - Taxi operation</option>
+                    <option class="rfa_rating" value="49390">49390 (H) - Other passenger land transport</option>
+                    <option class="rfa_rating" value="49410">49410 (H) - Freight transport by road</option>
+                    <option class="rfa_rating" value="49420">49420 (H) - Removal services</option>
+                    <option class="rfa_rating" value="49500">49500 (H) - Transport via pipeline</option>
+                    <option class="rfa_rating" value="50100">50100 (H) - Sea and coastal passenger water transport</option>
+                    <option class="rfa_rating" value="50200">50200 (H) - Sea and coastal freight water transport</option>
+                    <option class="rfa_rating" value="50300">50300 (H) - Inland passenger water transport</option>
+                    <option class="rfa_rating" value="50400">50400 (H) - Inland freight water transport</option>
+                    <option class="rfa_rating" value="51101">51101 (H) - Scheduled passenger air transport</option>
+                    <option class="rfa_rating" value="51102">51102 (H) - Non-scheduled passenger air transport</option>
+                    <option class="rfa_rating" value="51210">51210 (H) - Freight air transport</option>
+                    <option class="rfa_rating" value="51220">51220 (H) - Space transport</option>
+                    <option class="rfa_rating" value="52101">52101 (H) - Operation of warehousing and storage facilities for water transport activities</option>
+                    <option class="rfa_rating" value="52102">52102 (H) - Operation of warehousing and storage facilities for air transport activities</option>
+                    <option class="rfa_rating" value="52103">52103 (H) - Operation of warehousing and storage facilities for land transport activities</option>
+                    <option class="rfa_rating" value="52211">52211 (H) - Operation of rail freight terminals</option>
+                    <option class="rfa_rating" value="52212">52212 (H) - Operation of rail passenger facilities at railway stations</option>
+                    <option class="rfa_rating" value="52213">52213 (H) - Operation of bus and coach passenger facilities at bus and coach stations</option>
+                    <option class="rfa_rating" value="52219">52219 (H) - Other service activities incidental to land transportation, n.e.c.</option>
+                    <option class="rfa_rating" value="52220">52220 (H) - Service activities incidental to water transportation</option>
+                    <option class="rfa_rating" value="52230">52230 (H) - Service activities incidental to air transportation</option>
+                    <option class="rfa_rating" value="52241">52241 (H) - Cargo handling for water transport activities</option>
+                    <option class="rfa_rating" value="52242">52242 (H) - Cargo handling for air transport activities</option>
+                    <option class="rfa_rating" value="52243">52243 (H) - Cargo handling for land transport activities</option>
+                    <option class="rfa_rating" value="52290">52290 (H) - Other transportation support activities</option>
+                    <option class="rfa_rating" value="53100">53100 (H) - Postal activities under universal service obligation</option>
+                    <option class="rfa_rating" value="53201">53201 (H) - Licensed carriers</option>
+                    <option class="rfa_rating" value="53202">53202 (H) - Unlicensed carriers</option>
+                    <option class="rfa_rating" value="55100">55100 (I) - Hotels and similar accommodation</option>
+                    <option class="rfa_rating" value="55201">55201 (I) - Holiday centres and villages</option>
+                    <option class="rfa_rating" value="55202">55202 (I) - Youth hostels</option>
+                    <option class="rfa_rating" value="55209">55209 (I) - Other holiday and other collective accommodation</option>
+                    <option class="rfa_rating" value="55300">55300 (I) - Recreational vehicle parks, trailer parks and camping grounds</option>
+                    <option class="rfa_rating" value="55900">55900 (I) - Other accommodation</option>
+                    <option class="rfa_rating" value="56101">56101 (I) - Licenced restaurants</option>
+                    <option class="rfa_rating" value="56102">56102 (I) - Unlicenced restaurants and cafes</option>
+                    <option class="rfa_rating" value="56103">56103 (I) - Take-away food shops and mobile food stands</option>
+                    <option class="rfa_rating" value="56210">56210 (I) - Event catering activities</option>
+                    <option class="rfa_rating" value="56290">56290 (I) - Other food services</option>
+                    <option class="rfa_rating" value="56301">56301 (I) - Licenced clubs</option>
+                    <option class="rfa_rating" value="56302">56302 (I) - Public houses and bars</option>
+                    <option class="rfa_rating" value="58110">58110 (J) - Book publishing</option>
+                    <option class="rfa_rating" value="58120">58120 (J) - Publishing of directories and mailing lists</option>
+                    <option class="rfa_rating" value="58130">58130 (J) - Publishing of newspapers</option>
+                    <option class="rfa_rating" value="58141">58141 (J) - Publishing of learned journals</option>
+                    <option class="rfa_rating" value="58142">58142 (J) - Publishing of consumer and business journals and periodicals</option>
+                    <option class="rfa_rating" value="58190">58190 (J) - Other publishing activities</option>
+                    <option class="rfa_rating" value="58210">58210 (J) - Publishing of computer games</option>
+                    <option class="rfa_rating" value="58290">58290 (J) - Other software publishing</option>
+                    <option class="rfa_rating" value="59111">59111 (J) - Motion picture production activities</option>
+                    <option class="rfa_rating" value="59112">59112 (J) - Video production activities</option>
+                    <option class="rfa_rating" value="59113">59113 (J) - Television programme production activities</option>
+                    <option class="rfa_rating" value="59120">59120 (J) - Motion picture, video and television programme post-production activities</option>
+                    <option class="rfa_rating" value="59131">59131 (J) - Motion picture distribution activities</option>
+                    <option class="rfa_rating" value="59132">59132 (J) - Video distribution activities</option>
+                    <option class="rfa_rating" value="59133">59133 (J) - Television programme distribution activities</option>
+                    <option class="rfa_rating" value="59140">59140 (J) - Motion picture projection activities</option>
+                    <option class="rfa_rating" value="59200">59200 (J) - Sound recording and music publishing activities</option>
+                    <option class="rfa_rating" value="60100">60100 (J) - Radio broadcasting</option>
+                    <option class="rfa_rating" value="60200">60200 (J) - Television programming and broadcasting activities</option>
+                    <option class="rfa_rating" value="61100">61100 (J) - Wired telecommunications activities</option>
+                    <option class="rfa_rating" value="61200">61200 (J) - Wireless telecommunications activities</option>
+                    <option class="rfa_rating" value="61300">61300 (J) - Satellite telecommunications activities</option>
+                    <option class="rfa_rating" value="61900">61900 (J) - Other telecommunications activities</option>
+                    <option class="rfa_rating" value="62011">62011 (J) - Ready-made interactive leisure and entertainment software development</option>
+                    <option class="rfa_rating" value="62012">62012 (J) - Business and domestic software development</option>
+                    <option class="rfa_rating" value="62020">62020 (J) - Information technology consultancy activities</option>
+                    <option class="rfa_rating" value="62030">62030 (J) - Computer facilities management activities</option>
+                    <option class="rfa_rating" value="62090">62090 (J) - Other information technology service activities</option>
+                    <option class="rfa_rating" value="63110">63110 (J) - Data processing, hosting and related activities</option>
+                    <option class="rfa_rating" value="63120">63120 (J) - Web portals</option>
+                    <option class="rfa_rating" value="63910">63910 (J) - News agency activities</option>
+                    <option class="rfa_rating" value="63990">63990 (J) - Other information service activities n.e.c.</option>
+                    <option class="rfa_rating" value="64110">64110 (K) - Central banking</option>
+                    <option class="rfa_rating" value="64191">64191 (K) - Banks</option>
+                    <option class="rfa_rating" value="64192">64192 (K) - Building societies</option>
+                    <option class="rfa_rating" value="64201">64201 (K) - Activities of agricultural holding companies</option>
+                    <option class="rfa_rating" value="64202">64202 (K) - Activities of production holding companies</option>
+                    <option class="rfa_rating" value="64203">64203 (K) - Activities of construction holding companies</option>
+                    <option class="rfa_rating" value="64204">64204 (K) - Activities of distribution holding companies</option>
+                    <option class="rfa_rating" value="64205">64205 (K) - Activities of financial services holding companies</option>
+                    <option class="rfa_rating" value="64209">64209 (K) - Activities of other holding companies n.e.c.</option>
+                    <option class="rfa_rating" value="64301">64301 (K) - Activities of investment trusts</option>
+                    <option class="rfa_rating" value="64302">64302 (K) - Activities of unit trusts</option>
+                    <option class="rfa_rating" value="64303">64303 (K) - Activities of venture and development capital companies</option>
+                    <option class="rfa_rating" value="64304">64304 (K) - Activities of open-ended investment companies</option>
+                    <option class="rfa_rating" value="64305">64305 (K) - Activities of property unit trusts</option>
+                    <option class="rfa_rating" value="64306">64306 (K) - Activities of real estate investment trusts</option>
+                    <option class="rfa_rating" value="64910">64910 (K) - Financial leasing</option>
+                    <option class="rfa_rating" value="64921">64921 (K) - Credit granting by non-deposit taking finance houses and other specialist consumer credit grantors</option>
+                    <option class="rfa_rating" value="64922">64922 (K) - Activities of mortgage finance companies</option>
+                    <option class="rfa_rating" value="64929">64929 (K) - Other credit granting n.e.c.</option>
+                    <option class="rfa_rating" value="64991">64991 (K) - Security dealing on own account</option>
+                    <option class="rfa_rating" value="64992">64992 (K) - Factoring</option>
+                    <option class="rfa_rating" value="64999">64999 (K) - Financial intermediation not elsewhere classified</option>
+                    <option class="rfa_rating" value="65110">65110 (K) - Life insurance</option>
+                    <option class="rfa_rating" value="65120">65120 (K) - Non-life insurance</option>
+                    <option class="rfa_rating" value="65201">65201 (K) - Life reinsurance</option>
+                    <option class="rfa_rating" value="65202">65202 (K) - Non-life reinsurance</option>
+                    <option class="rfa_rating" value="65300">65300 (K) - Pension funding</option>
+                    <option class="rfa_rating" value="66110">66110 (K) - Administration of financial markets</option>
+                    <option class="rfa_rating" value="66120">66120 (K) - Security and commodity contracts dealing activities</option>
+                    <option class="rfa_rating" value="66190">66190 (K) - Activities auxiliary to financial intermediation n.e.c.</option>
+                    <option class="rfa_rating" value="66210">66210 (K) - Risk and damage evaluation</option>
+                    <option class="rfa_rating" value="66220">66220 (K) - Activities of insurance agents and brokers</option>
+                    <option class="rfa_rating" value="66290">66290 (K) - Other activities auxiliary to insurance and pension funding</option>
+                    <option class="rfa_rating" value="66300">66300 (K) - Fund management activities</option>
+                    <option class="rfa_rating" value="68100">68100 (L) - Buying and selling of own real estate</option>
+                    <option class="rfa_rating" value="68201">68201 (L) - Renting and operating of Housing Association real estate</option>
+                    <option class="rfa_rating" value="68202">68202 (L) - Letting and operating of conference and exhibition centres</option>
+                    <option class="rfa_rating" value="68209">68209 (L) - Other letting and operating of own or leased real estate</option>
+                    <option class="rfa_rating" value="68310">68310 (L) - Real estate agencies</option>
+                    <option class="rfa_rating" value="68320">68320 (L) - Management of real estate on a fee or contract basis</option>
+                    <option class="rfa_rating" value="69101">69101 (M) - Barristers at law</option>
+                    <option class="rfa_rating" value="69102">69102 (M) - Solicitors</option>
+                    <option class="rfa_rating" value="69109">69109 (M) - Activities of patent and copyright agents; other legal activities n.e.c.</option>
+                    <option class="rfa_rating" value="69201">69201 (M) - Accounting and auditing activities</option>
+                    <option class="rfa_rating" value="69202">69202 (M) - Bookkeeping activities</option>
+                    <option class="rfa_rating" value="69203">69203 (M) - Tax consultancy</option>
+                    <option class="rfa_rating" value="70100">70100 (M) - Activities of head offices</option>
+                    <option class="rfa_rating" value="70210">70210 (M) - Public relations and communications activities</option>
+                    <option class="rfa_rating" value="70221">70221 (M) - Financial management</option>
+                    <option class="rfa_rating" value="70229">70229 (M) - Management consultancy activities other than financial management</option>
+                    <option class="rfa_rating" value="71111">71111 (M) - Architectural activities</option>
+                    <option class="rfa_rating" value="71112">71112 (M) - Urban planning and landscape architectural activities</option>
+                    <option class="rfa_rating" value="71121">71121 (M) - Engineering design activities for industrial process and production</option>
+                    <option class="rfa_rating" value="71122">71122 (M) - Engineering related scientific and technical consulting activities</option>
+                    <option class="rfa_rating" value="71129">71129 (M) - Other engineering activities</option>
+                    <option class="rfa_rating" value="71200">71200 (M) - Technical testing and analysis</option>
+                    <option class="rfa_rating" value="72110">72110 (M) - Research and experimental development on biotechnology</option>
+                    <option class="rfa_rating" value="72190">72190 (M) - Other research and experimental development on natural sciences and engineering</option>
+                    <option class="rfa_rating" value="72200">72200 (M) - Research and experimental development on social sciences and humanities</option>
+                    <option class="rfa_rating" value="73110">73110 (M) - Advertising agencies</option>
+                    <option class="rfa_rating" value="73120">73120 (M) - Media representation services</option>
+                    <option class="rfa_rating" value="73200">73200 (M) - Market research and public opinion polling</option>
+                    <option class="rfa_rating" value="74100">74100 (M) - specialised design activities</option>
+                    <option class="rfa_rating" value="74201">74201 (M) - Portrait photographic activities</option>
+                    <option class="rfa_rating" value="74202">74202 (M) - Other specialist photography</option>
+                    <option class="rfa_rating" value="74203">74203 (M) - Film processing</option>
+                    <option class="rfa_rating" value="74209">74209 (M) - Photographic activities not elsewhere classified</option>
+                    <option class="rfa_rating" value="74300">74300 (M) - Translation and interpretation activities</option>
+                    <option class="rfa_rating" value="74901">74901 (M) - Environmental consulting activities</option>
+                    <option class="rfa_rating" value="74902">74902 (M) - Quantity surveying activities</option>
+                    <option class="rfa_rating" value="74909">74909 (M) - Other professional, scientific and technical activities n.e.c.</option>
+                    <option class="rfa_rating" value="74990">74990 (M) - Non-trading company non trading</option>
+                    <option class="rfa_rating" value="75000">75000 (M) - Veterinary activities</option>
+                    <option class="rfa_rating" value="77110">77110 (N) - Renting and leasing of cars and light motor vehicles</option>
+                    <option class="rfa_rating" value="77120">77120 (N) - Renting and leasing of trucks and other heavy vehicles</option>
+                    <option class="rfa_rating" value="77210">77210 (N) - Renting and leasing of recreational and sports goods</option>
+                    <option class="rfa_rating" value="77220">77220 (N) - Renting of video tapes and disks</option>
+                    <option class="rfa_rating" value="77291">77291 (N) - Renting and leasing of media entertainment equipment</option>
+                    <option class="rfa_rating" value="77299">77299 (N) - Renting and leasing of other personal and household goods</option>
+                    <option class="rfa_rating" value="77310">77310 (N) - Renting and leasing of agricultural machinery and equipment</option>
+                    <option class="rfa_rating" value="77320">77320 (N) - Renting and leasing of construction and civil engineering machinery and equipment</option>
+                    <option class="rfa_rating" value="77330">77330 (N) - Renting and leasing of office machinery and equipment (including computers)</option>
+                    <option class="rfa_rating" value="77341">77341 (N) - Renting and leasing of passenger water transport equipment</option>
+                    <option class="rfa_rating" value="77342">77342 (N) - Renting and leasing of freight water transport equipment</option>
+                    <option class="rfa_rating" value="77351">77351 (N) - Renting and leasing of air passenger transport equipment</option>
+                    <option class="rfa_rating" value="77352">77352 (N) - Renting and leasing of freight air transport equipment</option>
+                    <option class="rfa_rating" value="77390">77390 (N) - Renting and leasing of other machinery, equipment and tangible goods n.e.c.</option>
+                    <option class="rfa_rating" value="77400">77400 (N) - Leasing of intellectual property and similar products, except copyright works</option>
+                    <option class="rfa_rating" value="78101">78101 (N) - Motion picture, television and other theatrical casting activities</option>
+                    <option class="rfa_rating" value="78109">78109 (N) - Other activities of employment placement agencies</option>
+                    <option class="rfa_rating" value="78200">78200 (N) - Temporary employment agency activities</option>
+                    <option class="rfa_rating" value="78300">78300 (N) - Human resources provision and management of human resources functions</option>
+                    <option class="rfa_rating" value="79110">79110 (N) - Travel agency activities</option>
+                    <option class="rfa_rating" value="79120">79120 (N) - Tour operator activities</option>
+                    <option class="rfa_rating" value="79901">79901 (N) - Activities of tourist guides</option>
+                    <option class="rfa_rating" value="79909">79909 (N) - Other reservation service activities n.e.c.</option>
+                    <option class="rfa_rating" value="80100">80100 (N) - Private security activities</option>
+                    <option class="rfa_rating" value="80200">80200 (N) - Security systems service activities</option>
+                    <option class="rfa_rating" value="80300">80300 (N) - Investigation activities</option>
+                    <option class="rfa_rating" value="81100">81100 (N) - Combined facilities support activities</option>
+                    <option class="rfa_rating" value="81210">81210 (N) - General cleaning of buildings</option>
+                    <option class="rfa_rating" value="81221">81221 (N) - Window cleaning services</option>
+                    <option class="rfa_rating" value="81222">81222 (N) - Specialised cleaning services</option>
+                    <option class="rfa_rating" value="81223">81223 (N) - Furnace and chimney cleaning services</option>
+                    <option class="rfa_rating" value="81229">81229 (N) - Other building and industrial cleaning activities</option>
+                    <option class="rfa_rating" value="81291">81291 (N) - Disinfecting and exterminating services</option>
+                    <option class="rfa_rating" value="81299">81299 (N) - Other cleaning services</option>
+                    <option class="rfa_rating" value="81300">81300 (N) - Landscape service activities</option>
+                    <option class="rfa_rating" value="82110">82110 (N) - Combined office administrative service activities</option>
+                    <option class="rfa_rating" value="82190">82190 (N) - Photocopying, document preparation and other specialised office support activities</option>
+                    <option class="rfa_rating" value="82200">82200 (N) - Activities of call centres</option>
+                    <option class="rfa_rating" value="82301">82301 (N) - Activities of exhibition and fair organisers</option>
+                    <option class="rfa_rating" value="82302">82302 (N) - Activities of conference organisers</option>
+                    <option class="rfa_rating" value="82911">82911 (N) - Activities of collection agencies</option>
+                    <option class="rfa_rating" value="82912">82912 (N) - Activities of credit bureaus</option>
+                    <option class="rfa_rating" value="82920">82920 (N) - Packaging activities</option>
+                    <option class="rfa_rating" value="82990">82990 (N) - Other business support service activities n.e.c.</option>
+                    <option class="rfa_rating" value="84110">84110 (O) - General public administration activities</option>
+                    <option class="rfa_rating" value="84120">84120 (O) - Regulation of health care, education, cultural and other social services, not incl. social security</option>
+                    <option class="rfa_rating" value="84130">84130 (O) - Regulation of and contribution to more efficient operation of businesses</option>
+                    <option class="rfa_rating" value="84210">84210 (O) - Foreign affairs</option>
+                    <option class="rfa_rating" value="84220">84220 (O) - Defence activities</option>
+                    <option class="rfa_rating" value="84230">84230 (O) - Justice and judicial activities</option>
+                    <option class="rfa_rating" value="84240">84240 (O) - Public order and safety activities</option>
+                    <option class="rfa_rating" value="84250">84250 (O) - Fire service activities</option>
+                    <option class="rfa_rating" value="84300">84300 (O) - Compulsory social security activities</option>
+                    <option class="rfa_rating" value="85100">85100 (P) - Pre-primary education</option>
+                    <option class="rfa_rating" value="85200">85200 (P) - Primary education</option>
+                    <option class="rfa_rating" value="85310">85310 (P) - General secondary education</option>
+                    <option class="rfa_rating" value="85320">85320 (P) - Technical and vocational secondary education</option>
+                    <option class="rfa_rating" value="85410">85410 (P) - Post-secondary non-tertiary education</option>
+                    <option class="rfa_rating" value="85421">85421 (P) - First-degree level higher education</option>
+                    <option class="rfa_rating" value="85422">85422 (P) - Post-graduate level higher education</option>
+                    <option class="rfa_rating" value="85510">85510 (P) - Sports and recreation education</option>
+                    <option class="rfa_rating" value="85520">85520 (P) - Cultural education</option>
+                    <option class="rfa_rating" value="85530">85530 (P) - Driving school activities</option>
+                    <option class="rfa_rating" value="85590">85590 (P) - Other education n.e.c.</option>
+                    <option class="rfa_rating" value="85600">85600 (P) - Educational support services</option>
+                    <option class="rfa_rating" value="86101">86101 (Q) - Hospital activities</option>
+                    <option class="rfa_rating" value="86102">86102 (Q) - Medical nursing home activities</option>
+                    <option class="rfa_rating" value="86210">86210 (Q) - General medical practice activities</option>
+                    <option class="rfa_rating" value="86220">86220 (Q) - Specialists medical practice activities</option>
+                    <option class="rfa_rating" value="86230">86230 (Q) - Dental practice activities</option>
+                    <option class="rfa_rating" value="86900">86900 (Q) - Other human health activities</option>
+                    <option class="rfa_rating" value="87100">87100 (Q) - Residential nursing care facilities</option>
+                    <option class="rfa_rating" value="87200">87200 (Q) - Residential care activities for learning difficulties, mental health and substance abuse</option>
+                    <option class="rfa_rating" value="87300">87300 (Q) - Residential care activities for the elderly and disabled</option>
+                    <option class="rfa_rating" value="87900">87900 (Q) - Other residential care activities n.e.c.</option>
+                    <option class="rfa_rating" value="88100">88100 (Q) - Social work activities without accommodation for the elderly and disabled</option>
+                    <option class="rfa_rating" value="88910">88910 (Q) - Child day-care activities</option>
+                    <option class="rfa_rating" value="88990">88990 (Q) - Other social work activities without accommodation n.e.c.</option>
+                    <option class="rfa_rating" value="90010">90010 (R) - Performing arts</option>
+                    <option class="rfa_rating" value="90020">90020 (R) - Support activities to performing arts</option>
+                    <option class="rfa_rating" value="90030">90030 (R) - Artistic creation</option>
+                    <option class="rfa_rating" value="90040">90040 (R) - Operation of arts facilities</option>
+                    <option class="rfa_rating" value="91011">91011 (R) - Library activities</option>
+                    <option class="rfa_rating" value="91012">91012 (R) - Archives activities</option>
+                    <option class="rfa_rating" value="91020">91020 (R) - Museums activities</option>
+                    <option class="rfa_rating" value="91030">91030 (R) - Operation of historical sites and buildings and similar visitor attractions</option>
+                    <option class="rfa_rating" value="91040">91040 (R) - Botanical and zoological gardens and nature reserves activities</option>
+                    <option class="rfa_rating" value="92000">92000 (R) - Gambling and betting activities</option>
+                    <option class="rfa_rating" value="93110">93110 (R) - Operation of sports facilities</option>
+                    <option class="rfa_rating" value="93120">93120 (R) - Activities of sport clubs</option>
+                    <option class="rfa_rating" value="93130">93130 (R) - Fitness facilities</option>
+                    <option class="rfa_rating" value="93191">93191 (R) - Activities of racehorse owners</option>
+                    <option class="rfa_rating" value="93199">93199 (R) - Other sports activities</option>
+                    <option class="rfa_rating" value="93210">93210 (R) - Activities of amusement parks and theme parks</option>
+                    <option class="rfa_rating" value="93290">93290 (R) - Other amusement and recreation activities n.e.c.</option>
+                    <option class="rfa_rating" value="94110">94110 (S) - Activities of business and employers membership organisations</option>
+                    <option class="rfa_rating" value="94120">94120 (S) - Activities of professional membership organisations</option>
+                    <option class="rfa_rating" value="94200">94200 (S) - Activities of trade unions</option>
+                    <option class="rfa_rating" value="94910">94910 (S) - Activities of religious organisations</option>
+                    <option class="rfa_rating" value="94920">94920 (S) - Activities of political organisations</option>
+                    <option class="rfa_rating" value="94990">94990 (S) - Activities of other membership organisations n.e.c.</option>
+                    <option class="rfa_rating" value="95110">95110 (S) - Repair of computers and peripheral equipment</option>
+                    <option class="rfa_rating" value="95120">95120 (S) - Repair of communication equipment</option>
+                    <option class="rfa_rating" value="95210">95210 (S) - Repair of consumer electronics</option>
+                    <option class="rfa_rating" value="95220">95220 (S) - Repair of household appliances and home and garden equipment</option>
+                    <option class="rfa_rating" value="95230">95230 (S) - Repair of footwear and leather goods</option>
+                    <option class="rfa_rating" value="95240">95240 (S) - Repair of furniture and home furnishings</option>
+                    <option class="rfa_rating" value="95250">95250 (S) - Repair of watches, clocks and jewellery</option>
+                    <option class="rfa_rating" value="95290">95290 (S) - Repair of personal and household goods n.e.c.</option>
+                    <option class="rfa_rating" value="96010">96010 (S) - Washing and (dry-)cleaning of textile and fur products</option>
+                    <option class="rfa_rating" value="96020">96020 (S) - Hairdressing and other beauty treatment</option>
+                    <option class="rfa_rating" value="96030">96030 (S) - Funeral and related activities</option>
+                    <option class="rfa_rating" value="96040">96040 (S) - Physical well-being activities</option>
+                    <option class="rfa_rating" value="96090">96090 (S) - Other service activities n.e.c.</option>
+                    <option class="rfa_rating" value="97000">97000 (T) - Activities of households as employers of domestic personnel</option>
+                    <option class="rfa_rating" value="98000">98000 (T) - Residents property management</option>
+                    <option class="rfa_rating" value="98100">98100 (T) - Undifferentiated goods-producing activities of private households for own use</option>
+                    <option class="rfa_rating" value="98200">98200 (T) - Undifferentiated service-producing activities of private households for own use</option>
+                    <option class="rfa_rating" value="99000">99000 (U) - Activities of extraterritorial organisations and bodies</option>
+                    <option class="rfa_rating" value="99999">99999 (U) - Dormant Company</option>
+                    </select>
+                </div>
+            </div>      
+        </div>
+
+		<div class="row">
+			<div class="column1">
+				<label for="company-name" >Keyword Filter</label>
+			</div>
+			<div class="column2">
+				<div class="postcode_format">	
+		  		  <input type="text"  style="width: 722px" id="company-name" name="fname" value="" placeholder="filter company name by keyword">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="column1">
+				<label for="distance-in-miles" >Distance in Miles</label>
+			</div>
+			<div class="column2">
+				<div class="postcode_format">	
+					<input type="text" style="width: 191px"  id="distance" name="fname-distance" value="" placeholder="from postcode" onchange="update_generate()">
+				</div>
+				<div class="postcode_format">	
+					<label for="post-code">Within Postcode</label>
+					<input type="text" style="width: 118px"  id="post-code" name="fname-postcode" value="" placeholder="postcode" onchange="update_generate()">
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="column1">
+				<label for="rating" class="rfa-label first-name" onclick="openCity(event, 'RFA')" >RFA Rating<sup class='info_sub'>More Info</sup></label>					
+			</div>
+    		<div class="column2">
+				<div class="rfa-rating-option" style="width:338px" class="postcode_format">	
+					<select id="multipleSelect1" class="selectpicker show-menu-arrow form-control" onchange="check_rating()" multiple>
+					<option class="rfa_rating" value="all">ALL Trading </option>
+                    <option class="rfa_rating" value="allx">ALL</option>
+					<option class="rfa_rating" value="amber">Amber</option>
+					<option class="rfa_rating" value="bronze">Bronze</option>
+					<option class="rfa_rating" value="silver">Silver</option>
+					<option class="rfa_rating" value="gold">Gold</option>
+					<option class="rfa_rating" value="redflag3">Three Red Flags</option>
+					<option class="rfa_rating" value="redflag2">Two Red Flags</option>
+					<option class="rfa_rating" value="redflag1">One Red Flag</option>
+					<option class="rfa_rating" value="NT">Not Trading</option>
+					<option class="rfa_rating" value="INSOLV">Insolvent</option>
+					<option class="rfa_rating" value="str">Stike Off</option>
+					<option class="rfa_rating" value="dissolved">Dissolved</option>
+    				</select>
+				</div>
+            <div class="postcode_format"> 
+                    <label style="line-height: 32px;font-weight: 400;" id="rfa-rating-description" >Excludes discontinued, dissolved, not trading and strike off.</label>    
+                 </div>
+    		</div>
+		</div>
+
+  <div class="row">
+    <div class="column1">
+      <label for="rating" class="first-name">Company Type<sup>New</sup></label>
+    </div>
+    <div class="column2">
+      <div class="rfa-rating-option" style="width:723px" class="postcode_format"> 
+        <select  id="multipleSelect4" class="selectpicker show-menu-arrow form-control" onchange="check_company_type()" multiple>
+          <option class="rfa_rating" value="all">ALL</option>
+          <option class="rfa_rating" value="ltd">Limited</option>
+          <option class="rfa_rating" value="plc">PLC - Public Limited Company</option>
+          <option class="rfa_rating" value="llp">LLP - Limited Liability Partnership</option>
+          <option class="rfa_rating" value="private-unlimited">Non Limited</option>
+          <option class="rfa_rating" value="other">Other</option>
+          <!-- private-limited-guarant-nsc ??? -->
+        </select>
+      </div>
+    </div>
   </div>
 
-  <p>Click on the button for a surprise.</p>
+		<div class="row">
+			<div class="column1">
+				<label for="search-date" id="label-search-date" >Incorporation Date</label>
+			</div>
+		    <div class="column2">
+				<div class="postcode_format">	
+					<input type="date" style="width: 200px" id="search-date" name="fname-search-date" value="" placeholder="dd/mm/yyyy" onchange="update_generate()">
+				</div>
+			    <div class="postcode_format">	
+					<label for="search-date" id="label-search-dateto" >To </label>
+					<input type="date" style="width: 200px" id="search-dateto" name="fname-search-dateto" value="" placeholder="dd/mm/yyyy" onchange="update_generate()">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="column1">
+				<label for="turnover" >Actual Turnover</label>
+			</div>
+			<div class="column2">
+				<div class="postcode_format">	
+					<input type="text" style="width: 200px" id="turnover" name="fname-turnover" value="" placeholder="minimum" onchange="update_generate()">
+				</div>
+				<div class="postcode_format">	
+					<label for="turnoverto" >To </label>
+					<input type="text" style="width: 200px" id="turnoverto" name="fname-turnoverto" value="" placeholder="maximum" onchange="update_generate()">
+				</div>
 
-  <button onClick="showPicture()" class="button">Click me</button>
-  <button onClick="test()" class="button">test4</button>
+<!--
+                <div class="postcode_format">   
+                    <label class="switch">
+                        <input type="checkbox" id="turnover-switch" value ="x">
+                        <span class="slider round"></span>
+                    </label>
+                    <div class="postcode_format">   
+                        <label>Include estimated turnover</label>
+                    </div>  
+                </div>
+-->
+				</div>
+			</div>
+			<div class="row">
+				<div class="column1">
+					<label for="turnover" >Estimate Turnover</label>
+				</div>
+				<div class="column2">
+					<div class="postcode_format">	
+						<input type="text" style="width: 200px" id="estimate-turnover" name="fname-estimate-turnover" value="" placeholder="minimum" onchange="update_generate()">
+					</div>
 
-  <div id="image"></div>
-  
-  
+					<div class="postcode_format">	
+						<label for="turnoverto" >To </label>
+						<input type="text" style="width: 200px" id="estimate-turnoverto" name="fname-estimate-turnoverto" value="" placeholder="maximum" onchange="update_generate()">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="column1">
+					<label for="employees" >Actual Employees</label>
+				</div>
+				<div class="column2">
+					<div class="postcode_format">	
+						<input type="text" style="width: 200px" id="employees" name="fname-employees" value="" placeholder="minimum" onchange="update_generate()">
+					</div>
+					<div class="postcode_format">	
+						<label for="employeesto" >To </label>
+						<input type="text" style="width: 200px" id="employeesto" name="fname-employeesto" value="" placeholder="maximum" onchange="update_generate()">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="column1">
+					<label for="employees" >Estimate Employees</label>
+				</div>
+				<div class="column2">
+					<div class="postcode_format">	
+					<input type="text" style="width: 200px" id="estimate-employees" name="fname-estimate-employees" value="" placeholder="minimum" onchange="update_generate()">
+				</div>
+				<div class="postcode_format">	
+					<label for="employeesto" >To </label>
+					<input type="text" style="width: 200px" id="estimate-employeesto" name="fname-estimate-employeesto" value="" placeholder="maximum" onchange="update_generate()">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="column1">
+				<label for="nontrading">Telephone</label>		
+			</div>
+			<div class="column2">
+				<div class="postcode_format">	
+					<select style="width: 400px; display: none" class="rfa_rating" id="nontrading" onchange="update_generate()">
+					<option class="rfa_rating" value="Y">Yes (Discontinued, Dissolved, Not-trading or Strike Off)</option>
+					<option class="rfa_rating" value="N">No</option>
+					</select>
+				</div>
+				<div class="postcode_format">	
+					<label style="padding-right: 0px; display: none" for="hascontact">Has Contact Details</label>
+					<select style="width: 150px; display: none" class="rfa_rating" id="hascontact" onchange="update_generate()">
+					<option class="rfa_rating" value="all">Not Necessary</option>
+					<option class="rfa_rating" value="hascontact">Phone or Email</option>
+					<option class="rfa_rating" value="phone">Phone</option>
+					<option class="rfa_rating" value="email">Email</option>
+					</select>
+				</div>
+
+<!-- 01/02/20 New Switch -->
+                <div class="postcode_format">   
+                    <label class="switch">
+                        <input type="checkbox" id="has_contacts-switch" value ="">
+                        <span class="slider round"></span>
+                    </label>
+                    <div class="postcode_format">   
+                            <label>Has Contact</label>
+                    </div>  
+                    
+                    <div style="display:inline-block;">
+                      <label class="switch">
+                          <input type="checkbox" id="tps-switch" value ="">
+                          <span class="slider round"></span>
+                      </label>
+                      <div class="postcode_format">   
+                            <label>Exclude TPS registered companies</label>
+                      </div>  
+                    </div>  
+                    <div style="display:inline-block;">
+                      <label class="switch">
+                          <input type="checkbox" id="phone-switch" value ="" onchange="update_duplicate_phone()">
+                          <span class="slider round"></span>
+                      </label>
+                      <div class="postcode_format">   
+                            <label>Exclude duplicate Leads by phone</label>
+                      </div>  
+                    </div>  
+
+                </div>
+
+<!-- 01/02/20 New Switch -->
+
+			</div>
+		</div>
+
+<!-- 20/02/20 Create Lead Contacts and Contacts -->
+        <div class="row">
+            <div class="column1">
+                <label for="nontrading">Contacts</label>       
+            </div>
+            <div class="column2">
+                <div class="postcode_format">   
+                    <label class="switch">
+                        <input  type="checkbox" id="generate_contacts" value ="" onchange="update_generate_contacts()">
+                        <span class="slider2 round"></span>
+                    </label>
+                    <div class="postcode_format">   
+             <label>Create <span style="font-style: italic;font-weight:bold;color: #ee2e24">Lead Contacts</span> for Leads & <span style="font-style: italic;font-weight:bold;color: #ee2e24">Contacts </span>for Accounts.</label>
+                    </div>  
+                </div>
+            </div>
+        </div>
+<!-- 20/02/20 Create Lead Contacts and Contacts -->
+
+		</form> 		
+		<div class="buttons_format">	
+			<button class="button" id="search-button" onclick="GetZohoData()"> Search</button>		
+			<button class="button" id="clear-button" onclick="ClearData()"> Clear</button>
+			<button class="button" id="sic-clear-button" onclick="ClearSIC()"> Clear SIC Sector/Codes</button>
+			<button class="button" disabled id="ok-update" name="ok-update" onclick="UploadCRM()" >Generate Leads Records</button>
+		</div>
+
+        <div class="left-div" style="margin-top :10px">
+          <p id="updatestatus">Enter search criteria and click search button.</p>
+        </div>
+        <div class="left-div " style="margin-top :10px">
+          <div id="loader" class="loader">
+          </div>
+        </div>
+
+      </div>
+      <div id="divR" class="divR">
+            <p>Tutorial Video, to get you started.</p>
+            <iframe width='560' height='315' src='https://www.youtube.com/embed/iYRXMJoLNsE' frameborder='0' allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
+
+            <button class="button" id="hide-video-button" onclick="HideVideo()" style="margin-top :10px"> Hide</button>
+    
+      </div>
+    </div>
+
+	</div> <!-- Search Tab -->
+
+	<!-- Scheduler List Tab -->
+	<div id="Tokyo" class="tabcontent">
+		<!--<p style="margin-bottom: 10px">Generating up to 1,000 Lead records every 2 hours. (Up to 12,000 every 24 hours)</p>-->
+
+<!--02/03/2020 JD 1.29 Added Progress bar to Scheduler List tab -->
+<div class="container">
+  <h3 class="scheduler-heading" id="scheduler_heading_name">Scheduler Is Idle</h3>
+  <p align="center">Generating up to 200 Lead and contact records every 2 hours and up to 1,200 every 24 hours.</p>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+      <p id="progress_name"></p>
+    </div>
+  </div>
+</div>
+<!--02/03/2020 JD 1.29 Added Progress bar to Scheduler List tab -->
+
+		<p class="refreshstatus" style="margin-bottom: 0px" id="refreshstatus">Refresh successful.</p>	
+		<p id="prospector_list"></p> <!-- Search Results Table -->
+
+		<div class="list_buttons">
+  			<button class="button cancel-button" id="cancel_btn" onclick="CancelScheduler()" >Cancel Waiting Schedule</button>
+			<p class="refreshstatus" id="message-line"></p>	
+		</div>
+	</div>
+	<!-- Subscriptions Tab -->
+	<div id="Paris" class="tabcontent">
+		<p style="margin-bottom: 25px" id="sub-text">Subscribe to a plan, and use your Zoho Admin Email address.</p>
+		<p id="buy_more_records"></p>
+
+		<p id="subs_list"></p>	<!-- Search Results Table -->
+  		<div class="list_buttons">
+  			<button class="button" id="buymorecredits-button" onclick="BuyMoreCredits()" > Buy More Credits </button>
+		</div>
+	</div>
+	<!-- Search Results Tab -->
+	<div id="Search" class="tabcontent">
 		<p style="margin-bottom: 0px">Displays the first 50 records found from search criteria.</p>
-		<p id="search_results">X</p>		
-	
+		<p id="search_results"></p>		
+	</div>
+	<!-- Subscriptions Tab -->
+	<div id="RFA" class="tabcontent">
+		<p style="margin-bottom: 25px" id="sub-text">The following ratings are used to indicate Red Flag Alert's rating of a company.</p>
+
+		<p id="rfa_list"></p>	<!-- Search Results Table -->
+		</div>
+	</div>
+	<div id="Help" class="tabcontent">
+		<p id="red-flag-alert"></p>
+		<p id="whats-new"></p>
+		</div>
+	</div>
+
+    <div id="credit" class="tabcontent">
+        <h5>Company Credit Check for Zoho CRM Extension</h5>
+        <p id="sub-text">Many company credit software’s limits the number of users that have access to key financial data. With our Zoho integration, any team member that has a Zoho account will be able to see financial data such as suggested credit limits, credit ratings, number of CCJs & much more.</p>
+        <iframe width="364" height="205" src="https://www.youtube.com/embed/Gqw39tWdJCg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <p id="b2bleads" >Try FREE for 14 Days, no credit card required.</p>
+        <div>
+            <button class="button" onclick="creditcheck()" > Install from the Marketplace</button>
+            <button class="button" onclick="Close()" > Close</button>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 </body>
 
 </html>
 <script>
+
+var gv_authorization              = "b90a4cc2d5e9a73009dbcc050ea054b6";
+var gv_organizationid             = "650590844";
+var gv_version                    = "1.34.1";
+var gv_diamond_counter_limit      = 1000;
+var gv_diamond_additional_credits = 2500;
+var gv_gold_counter_limit         = 500;
+var gv_gold_additional_credits    = 1500;
+var gv_silver_counter_limit       = 100;
+var gv_silver_additional_credits  = 1000;
+var gv_bronze_counter_limit       = 50;
+var gv_bronze_additional_credits  = 500;
+var gv_user_additional_credits    = 0;
+var gv_current_plan_status        = "notloaded";
+var gv_schedule_running           = "N"; // Flag used to determine if schedule created in this session.
+var gv_active_plan                = "N"; // Flag used to determine current subscription plan
+var gv_sector_all                 = "N"; // 15/10/2019
+var gv_url                        = ""; // 10/11/2019
+var gv_counter_limit              = 0;
+var gv_additional_credits         = 0;
+var gv_latest_invoice_id          = 0;
+var gv_records                    = 0;
+var gv_running_plan               = "N";
+var gv_counter                    = 0;
+var gv_useremail                  = "";
+var gv_trial_expired              = "Y"; 
+var gv_trial_period_end_date      = "";
+var gv_trial_days_left            = 0;
+var gv_bronze_plan_cost           = 0;
+var gv_silver_plan_cost           = 0;
+var gv_gold_plan_cost             = 0;
+var gv_diamond_plan_cost          = 0;
+var gv_bespoke_counter_limit      = 0;
+var gv_bespoke                    = "N";
+var gv_customer_id                = 0;
+var gv_current_schedule_id        = 0; //17/12/19
+var gv_safari_date_is_text        = "N"; //24/12/19
+var gv_search_from_date           = ""; //24/12/19
+var gv_search_to_date             = ""; //24/12/19
+var gv_index                      = 0;
+var gv_process_status             = ""; //03/03/20
+var gv_reset_days                 = ""; //04/03/20
+
+
+function InitialPageLoad()
+{
+    // 20/02/2020
+    hidespinner();
+
+
+    $("#multipleSelect3").selectpicker('refresh');      
+
+    checkCookie();
+    document.getElementById("defaultOpen").click(); 
+
+}
+
 function test()
 {
 
@@ -308,4 +1607,1693 @@ const toTitleCase = (phrase) =>
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 };
+
+function openCity(evt, cityName) 
+{
+    // Declare all variables
+    var i, tabcontent, tablinks;
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+
+    // Populate Prospector List
+    //BuildScheduleList();
+}
+function hidespinner() 
+{
+    var x = document.getElementById("loader");
+    x.style.display = "none";
+} 
+function showspinner() 
+{
+    var x = document.getElementById("loader");
+    x.style.display = "block";
+} 
+// Validate Search Criteria Fields
+function GetZohoData()
+{
+// trap when user presses return key
+    //if (gv_active_plan == "N" || (gv_counter == 0 && gv_additional_credits == 0))
+    //{
+        //return false;
+    //}
+
+// trap when user presses return key
+    if (gv_running_plan == "Y")
+    {
+        document.getElementById("updatestatus").innerHTML = "You have a schedule waiting or running, please wait until its finished.";
+        SetRed();
+        return false;
+    }
+    document.getElementById("updatestatus").innerHTML = "";
+    document.getElementById("search_results").innerHTML = "";
+    var postcode = document.forms["frm_search_name"]["fname-postcode"].value;
+    var turnover = document.getElementById("turnover").value;
+    var turnoverto = document.getElementById("turnoverto").value;
+    var estimate_turnover = document.getElementById("estimate-turnover").value;
+    var estimate_turnoverto = document.getElementById("estimate-turnoverto").value;
+    var employees = document.getElementById("employees").value;
+    var employeesto = document.getElementById("employeesto").value;
+    var estimate_employees = document.getElementById("estimate-employees").value;
+    var estimate_employeesto = document.getElementById("estimate-employeesto").value;
+    var distance = document.getElementById("distance").value;
+    var companyname = document.getElementById("company-name").value;
+    var today = new Date();
+    gv_search_from_date = "";
+    gv_search_to_date = "";
+    search_from_date = "";
+    search_to_date = "";
+
+    // 15/01/2019
+    var search_name = document.getElementById("search-name").value;
+    //if(search_name.match("^[a-zA-Z0-9]*$"))
+    if(search_name.match("^[a-zA-Z0-9 \\&]*$"))
+    {}
+    else
+    {
+        document.getElementById("updatestatus").innerHTML = "Search name must be alphanumeric.";
+        SetRed();
+        document.forms["frm_search_name"]["fname-search-name"].focus(); 
+        return false;   
+    }
+
+    //if(companyname.match("^[a-zA-Z0-9]*$"))
+    if(companyname.match("^[a-zA-Z0-9 \\&]*$"))
+    {}
+    else
+    {
+        document.getElementById("updatestatus").innerHTML = "Company name must be alphanumeric.";
+        SetRed();
+        document.forms["frm_search_name"]["fname"].focus(); 
+        return false;   
+    }
+    // 15/01/2019
+
+// 26/12/2019
+    var sic_value = $('#multipleSelect3').val();
+    console.log(sic_value);
+    if (!sic_value)
+    {
+        document.getElementById("updatestatus").innerHTML = "No SIC classification has been selected. You must select ALL or one classification.";
+        SetRed();
+        document.forms["frm_search_name"]["sic-search-name"].focus();   
+        return false;   
+    }
+// 26/12/2019
+
+    if (gv_safari_date_is_text == "Y")
+    {
+        console.log("Safari, yeah! - Dates");
+        if(document.getElementById("search-date").value != "")
+        {
+            search_date = document.getElementById("search-date").value;
+            day = search_date.slice(0,2);
+            month = search_date.slice(3,5);
+            year = search_date.slice(6,10);
+            search_date = month + "/" + day + "/" + year;
+            valid_date = new Date(search_date);
+            if (valid_date == "Invalid Date")
+            {
+                document.getElementById("updatestatus").innerHTML = "Invalid date. please enter format dd/mm/yyyy.";
+                document.forms["frm_search_name"]["fname-search-date"].focus(); 
+                SetRed();
+                return false;   
+            }
+            else
+            {
+                valid_date = year + "-" + month + "-" + day;
+                gv_search_from_date = valid_date;
+                search_from_date = new Date(valid_date);
+            }
+        }
+        if(document.getElementById("search-dateto").value != "")
+        {
+            search_date = document.getElementById("search-dateto").value;
+            day = search_date.slice(0,2);
+            month = search_date.slice(3,5);
+            year = search_date.slice(6,10);
+            search_date = month + "/" + day + "/" + year;
+            valid_date = new Date(search_date);
+            if (valid_date == "Invalid Date")
+            {
+                document.getElementById("updatestatus").innerHTML = "Invalid date. please enter format dd/mm/yyyy.";
+                document.forms["frm_search_name"]["fname-search-dateto"].focus();   
+                SetRed();
+                return false;   
+            }
+            else
+            {
+                valid_date = year + "-" + month + "-" + day;
+                gv_search_to_date = valid_date;
+                search_to_date = new Date(valid_date);
+            }
+        }
+    }
+    else
+    {
+        if(document.getElementById("search-date").value != "")
+        {
+            gv_search_from_date = document.getElementById("search-date").value;
+            search_from_date = new Date(document.getElementById("search-date").value);
+        }
+        if(document.getElementById("search-dateto").value != "")
+        {
+            gv_search_to_date = document.getElementById("search-dateto").value;
+            search_to_date = new Date(document.getElementById("search-dateto").value);
+        }
+    }
+    console.log("Query Search From Date: " + search_from_date + " Query Search To Date: " + search_to_date);
+    console.log("Search From Date: " + gv_search_from_date + " Search To Date: " + gv_search_to_date);
+
+    // 17/12/2019 Validate Dates
+    if(search_from_date != "")
+    {
+        if (search_from_date > today)
+        {
+            document.getElementById("updatestatus").innerHTML = "Incorporation Date cannot be in the future.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-search-date"].focus(); 
+            return false;   
+        }
+    }
+    if(search_to_date != "")
+    {
+        if (search_to_date > today)
+        {
+            document.getElementById("updatestatus").innerHTML = "Incorporation Date cannot be in the future.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-search-dateto"].focus();   
+            return false;   
+        }
+    }
+    if(search_from_date != "" && search_to_date != "")
+    {
+        if (search_from_date > search_to_date)
+        {
+            document.getElementById("updatestatus").innerHTML = "Incorporation From Date cannot be greater than to date.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-search-date"].focus(); 
+            return false;   
+        }
+    }
+
+    // 17/12/2019 Validate Dates
+    if (document.getElementById("search-name").value == "")
+    {
+        document.getElementById("updatestatus").innerHTML = "Please name your search. (i.e. Licensed restaurants within 10 miles of BB6 8HN)";
+        SetRed();
+        document.forms["frm_search_name"]["fname-search-name"].focus(); 
+        return false;   
+    }
+// Validate Turnover
+    if(isNaN(turnover))
+    {
+        document.getElementById("updatestatus").innerHTML = "Turnover must be a number.";
+        SetRed();
+        document.forms["frm_search_name"]["fname-turnover"].focus();    
+        return false;
+    }
+
+    // 17/12/2019
+    if (turnover !== "" ) 
+    {
+        if (parseInt(turnover) < 0 ) 
+        {
+            document.getElementById("updatestatus").innerHTML = "Turnover must be greater than zero.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-turnover"].focus();    
+            return false; 
+        }
+    }
+    if(isNaN(turnoverto))
+    {
+        document.getElementById("updatestatus").innerHTML = "Turnover must be a number.";
+        SetRed();
+        document.forms["frm_search_name"]["fname-turnoverto"].focus();  
+        return false;
+    }
+
+    // 17/12/2019
+    if (turnoverto !== "" ) 
+    {
+        if (parseInt(turnoverto) < 0 ) 
+        {
+            document.getElementById("updatestatus").innerHTML = "Turnover must be greater than zero.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-turnoverto"].focus();  
+            return false; 
+        }
+    }
+    if (turnover !== "" && turnoverto !== "") {
+        if (parseInt(turnover) > parseInt(turnoverto)) {
+            document.getElementById("updatestatus").innerHTML = "Turnover From must be less than Turnover To.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-turnover"].focus();    
+            return false; } }
+
+// Validate Turnover
+    if(isNaN(estimate_turnover))
+    {
+        document.getElementById("updatestatus").innerHTML = "Estimate Turnover must be a number.";
+        SetRed();
+        document.forms["frm_search_name"]["fname-estimate-turnover"].focus();   
+        return false;
+    }
+
+// 17/12/2019
+    if (estimate_turnover !== "" ) 
+    {
+        if (parseInt(estimate_turnover) < 0 ) 
+        {
+            document.getElementById("updatestatus").innerHTML = "Estimate Turnover must be greater than zero.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-estimate-turnover"].focus();   
+            return false; 
+        }
+    }
+    if(isNaN(estimate_turnoverto))
+    {
+        document.getElementById("updatestatus").innerHTML = "Estimate Turnover must be a number.";
+        SetRed();
+        document.forms["frm_search_name"]["fname-estimate-turnoverto"].focus(); 
+        return false;
+    }
+
+// 17/12/2019
+    if (estimate_turnoverto !== "" ) 
+    {
+        if (parseInt(estimate_turnoverto) < 0 ) 
+        {
+            document.getElementById("updatestatus").innerHTML = "Estimate Turnover must be greater than zero.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-estimate-turnoverto"].focus(); 
+            return false; 
+        }
+    }
+    if (estimate_turnover !== "" && estimate_turnoverto !== "") 
+    {
+        if (parseInt(estimate_turnover) > parseInt(estimate_turnoverto)) 
+        {
+            document.getElementById("updatestatus").innerHTML = "Estimate Turnover From must be less than Estimate Turnover To.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-estimate-turnover"].focus();   
+            return false; 
+        }   
+     }
+    if(isNaN(employees)) {
+        document.getElementById("updatestatus").innerHTML = "Employees greater than must be a number.";
+        SetRed();
+        document.forms["frm_search_name"]["fname-employees"].focus();   
+        return false;}
+
+// 17/12/2019
+    if (employees !== "" ) 
+    {
+        if (parseInt(employees) < 0 ) 
+        {
+            document.getElementById("updatestatus").innerHTML = "Employees must be greater than zero.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-employees"].focus();   
+            return false; 
+        }
+    }
+    if(isNaN(employeesto)) 
+    {
+        document.getElementById("updatestatus").innerHTML = "Employees greater than must be a number.";
+        SetRed();
+        document.forms["frm_search_name"]["fname-employeesto"].focus(); 
+        return false;
+    }
+
+// 17/12/2019
+    if (employeesto !== "" ) 
+    {
+        if (parseInt(employeesto) < 0 ) 
+        {
+            document.getElementById("updatestatus").innerHTML = "Employees must be greater than zero.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-employeesto"].focus(); 
+            return false; 
+        }
+    }
+    if (employees !== "" && employeesto !== "") {
+        if (parseInt(employees) > parseInt(employeesto)) {
+            document.getElementById("updatestatus").innerHTML = "Employees from must be less than employees to.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-employees"].focus();   
+            return false; } }
+
+    if(isNaN(estimate_employees)) {
+        document.getElementById("updatestatus").innerHTML = "Employees greater than must be a number.";
+        SetRed();
+        document.forms["frm_search_name"]["fname-estimate-employees"].focus();  
+        return false;}
+
+// 17/12/2019
+    if (estimate_employees !== "" ) 
+    {
+        if (parseInt(estimate_employees) < 0 ) 
+        {
+            document.getElementById("updatestatus").innerHTML = "Estimate employees must be greater than zero.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-estimate-employees"].focus();  
+            return false; 
+        }
+    }
+    if(isNaN(estimate_employeesto)) 
+    {
+        document.getElementById("updatestatus").innerHTML = "Employees greater than must be a number.";
+        SetRed();
+        document.forms["frm_search_name"]["fname-estimate-employeesto"].focus();    
+        return false;
+    }
+
+// 17/12/2019
+    if (estimate_employeesto !== "" ) 
+    {
+        if (parseInt(estimate_employeesto) < 0 ) 
+        {
+            document.getElementById("updatestatus").innerHTML = "Estimate employees must be greater than zero.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-estimate-employeesto"].focus();    
+            return false; 
+        }
+    }
+    if (estimate_employees !== "" && estimate_employeesto !== "") 
+    {
+        if (parseInt(estimate_employees) > parseInt(estimate_employeesto)) {
+            document.getElementById("updatestatus").innerHTML = "Estimate employees from must be less than estimate employees to.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-estimate-employees"].focus();  
+            return false; } 
+    }
+    if(isNaN(distance))
+    {
+        document.getElementById("updatestatus").innerHTML = "Distance in miles must be a number.";
+        SetRed();
+        document.forms["frm_search_name"]["fname-distance"].focus();    
+        return false;
+    }
+
+// 17/12/2019
+    if (distance !== "" ) 
+    {
+        if (parseInt(distance) < 0 ) 
+        {
+            document.getElementById("updatestatus").innerHTML = "Distance in miles must be greater than zero.";
+            SetRed();
+            document.forms["frm_search_name"]["fname-distance"].focus();    
+            return false; 
+        }
+    }
+    if (distance !== "" && postcode == "")
+    {
+        document.getElementById("updatestatus").innerHTML = "Please enter postcode, if you are searching with distance in miles.";
+        SetRed();
+        document.forms["frm_search_name"]["fname-postcode"].focus();    
+        document.getElementById("post-code").select();
+        return false;
+    }
+
+// 02/10/2019 New RFA Rating Multi- select
+    var value = $('#multipleSelect1').val();
+    rfa_all_selected = "N";
+    rfa_selected = "Y";
+    for (i= 0; i < value.length; i++)
+    {
+        if (value[i] == "all")
+        {
+            rfa_all_selected = "Y";
+        }
+    }
+    if(value.length == 1 && rfa_all_selected == "Y")
+    {
+        rfa_selected = "N";
+    }
+// 02/10/2019 New RFA Rating Multi- select
+
+// 03/10/2019 New Sector Multi- select
+    var value = $('#multipleSelect2').val();
+    sector_all_selected = "N";
+    sector_selected = "Y";
+    for (i= 0; i < value.length; i++)
+    {
+        if (value[i] == "all")
+        {
+            sector_all_selected = "Y";
+        }
+    }
+    if(value.length == 1 && sector_all_selected == "Y")
+    {
+        sector_selected = "N";
+    }
+// 03/10/2019 New Sector Multi- select
+    
+    if (postcode == "" && 
+        turnover == "" && 
+        turnoverto == "" && 
+        estimate_turnover == "" && 
+        estimate_turnoverto == "" && 
+        employees == "" && 
+        employeesto == "" && 
+        estimate_employees == "" && 
+        estimate_employeesto == "" && 
+        distance == "" && 
+        companyname == "" && 
+        search_from_date == "" &&
+        search_to_date == "" &&
+        rfa_selected == "N" &&
+        sector_selected == "N" &&
+        sic_value == "all" // 28/09/19 NEW SIC
+        ) 
+    {
+        document.getElementById("updatestatus").innerHTML = "Please enter at least one search criteria field.";
+        SetRed();
+        return false;
+    }   
+    // Validation passed now call RF API
+    SearchPostcode()
+}
+/************************************************************************************************************
+*
+* Get API DATA 
+*
+************************************************************************************************************/
+function SearchPostcode()
+{
+    // 07/03/2020 Set cookies in search
+    DeleteAndSetCookie();
+    // 07/03/2020 Set cookies in search
+    document.getElementById("ok-update").innerHTML = "Generate Leads Records";
+
+    // Post Code
+    search_postcode = "";
+    if (document.forms["frm_search_name"]["fname-postcode"].value !== "")   
+    {
+        var y = document.forms["frm_search_name"]["fname-postcode"].value;      
+        search_postcode = "postcode=" + y.replace(" ", "%20");
+        // 10/11/2019 Remove all spaces as spaces causes errors
+        search_postcode = search_postcode.trim();       
+    }
+
+/* Add Distance in Miles */
+    distance = "";
+    distance_status = "";
+    if (document.forms["frm_search_name"]["fname-distance"].value > 0)
+    {
+        var distance = "&distance=" + document.forms["frm_search_name"]["fname-distance"].value + "miles";
+    }
+
+// 02/10/2019 New RFA Rating Multi- select
+    var value = $('#multipleSelect1').val();
+    rfa_rating  = "";
+    rfa_first_time = "Y";
+    rfa_all = "N";
+    for (i= 0; i < value.length; i++)
+    {
+        if (value[i] == "all")
+        {
+            rfa_all = "Y";
+        }
+        else
+        {
+            if (rfa_first_time  == "Y")
+            {
+                rfa_rating += "&rating=" + value[i]; 
+                rfa_first_time  = "N";
+            }
+            else
+            {
+                rfa_rating += "," + value[i]; 
+            }
+        }
+    }
+    nontrading = "";
+    if (rfa_all == "Y")
+    {
+        rfa_rating = "";
+    
+// 01/02/2020 If "All Trading" is selected, then exclude Non trading
+        nontrading = "&exclude_non_trading=true";
+    }
+
+    console.log("RFA: " + rfa_rating);
+// 02/10/2019 New RFA Rating Multi- select
+
+// 03/10/2019 New RFA Rating Multi- select
+    var value = $('#multipleSelect2').val();
+    sector = "";
+    sector_first_time = "Y";
+    sector_all = "N";
+    for (i= 0; i < value.length; i++)
+    {
+        if (value[i] == "all")
+        {
+            sector_all = "Y";
+        }
+        else
+        {
+            if (sector_first_time   == "Y")
+            {
+                sector += "&sic_section=" + value[i]; 
+                sector_first_time   = "N";
+            }
+            else
+            {
+                sector += "," + value[i]; 
+            }
+        }
+    }
+    if (sector_all == "Y")
+    {
+        sector = "";
+    }
+    var sic_value = $('#multipleSelect3').val();
+    if (sic_value == "all")
+    {
+        sic = "";
+    }
+    else
+    {
+        sic = "&primary_sic07_code=" + sic_value;
+
+// 29/02/2020 Fix bug returns zero records if SIC Sector and SIC Code Description is selected, so remove SIC Sector
+        sector = "";
+// 29/02/2020
+
+    }
+    console.log("SIC Search : " + sic);
+
+// 01/02/2020 If "All Trading" is selected, then exclude Non trading
+// Non Trading
+//  nontrading = "";
+//  if (document.getElementById('nontrading').value == "Y")
+//  {
+//      nontrading = "&exclude_non_trading=true";
+//  }
+// 01/02/2020 If "All Trading" is selected, then exclude Non trading
+
+// Has Contact
+    hascontact = "";
+    if (document.getElementById('hascontact').value == "hascontact")
+    {
+        hascontact = "&has_contact=true";
+    }
+    if (document.getElementById('hascontact').value == "phone")
+    {
+        hascontact = "&has_phone_contact=true";
+    }
+    if (document.getElementById('hascontact').value == "email")
+    {
+        hascontact = "&has_email_contact=true";
+    }
+
+// 01/02/2020
+    var contacts_switch = document.getElementById("has_contacts-switch");
+    if (contacts_switch.checked == true)
+    {
+        console.log("contacts-switch: ON");        
+        hascontact = "&has_contact=true";
+    }
+// 01/02/2020
+
+// 17/02/2020
+    tpscontact = "";
+    var tps_switch = document.getElementById("tps-switch");
+    if (tps_switch.checked == true)
+    {
+        console.log("tps-switch: ON (false)");        
+        tpscontact = "&tps_registered=false";
+    }
+// 17/02/2020
+    
+    // Incorporation Date   
+    search_date = "";
+    if (gv_search_from_date != '') 
+    {
+        search_date = "&min_incorporation_date=" + gv_search_from_date;
+    }
+    if (gv_search_to_date != '') 
+    {
+        search_date += "&max_incorporation_date=" + gv_search_to_date;
+    }
+
+    // Turnover
+    turnover = "";
+    estimate_turnover = "";
+    if (document.getElementById('turnover').value != '')
+    {
+        turnover = "&min_turnover=" + document.getElementById('turnover').value;
+    }
+    if (document.getElementById('turnoverto').value != '')
+    {
+        turnover += "&max_turnover=" + document.getElementById('turnoverto').value;
+    }
+
+// Estimate Turnover
+    if (document.getElementById('estimate-turnover').value != '')
+    {
+        estimate_turnover = "&min_estimated_turnover=" + document.getElementById('estimate-turnover').value;
+    }
+    if (document.getElementById('estimate-turnoverto').value != '')
+    {
+        estimate_turnover += "&max_estimated_turnover=" + document.getElementById('estimate-turnoverto').value;
+    }
+// Employees
+    employees = "";
+    if (document.getElementById('employees').value != '')
+    {
+        employees = "&min_employees=" + document.getElementById('employees').value;
+    }
+    if (document.getElementById('employeesto').value != '')
+    {
+        employees += "&max_employees=" + document.getElementById('employeesto').value;
+    }
+// Estimate Employees
+    estimate_employees = "";
+    if (document.getElementById('estimate-employees').value != '')
+    {
+        estimate_employees = "&min_estimated_employees=" + document.getElementById('estimate-employees').value;
+    }
+    if (document.getElementById('estimate-employeesto').value != '')
+    {
+        estimate_employees += "&max_estimate_employees=" + document.getElementById('estimate-employeesto').value;
+    }
+    if (document.getElementById('company-name').value != '')
+    {
+        NI_field = document.getElementById('company-name').value;
+    
+        /* Only use the first 2 words */    
+        var y = NI_field.split(/\s+/).slice(0,2).join(' ');
+        str = NI_field;
+        var i = 0, strLength = str.length;
+        for (i = 0; i < strLength ;i++) 
+        {
+            str = str.replace(" ","%20");
+        }
+        company_name = "&match_name_prefix=" + str;
+    }
+    else
+    {
+        company_name = "";
+    }
+
+// 07/03/2020 Company Type
+    var value = $('#multipleSelect4').val();
+    company_type = "";
+    company_type_first_time = "Y";
+    company_type_all = "N";
+    for (i= 0; i < value.length; i++)
+    {
+        if (value[i] == "all")
+        {
+            company_type_all = "Y";
+        }
+        else
+        {
+            if (company_type_first_time   == "Y")
+            {
+                company_type += "&company_type=" + value[i]; 
+                company_type_first_time   = "N";
+            }
+            else
+            {
+                company_type += "," + value[i]; 
+            }
+        }
+    }
+    if (company_type_all == "Y")
+    {
+        company_type = "";
+    }
+    console.log("Company Type: " + company_type);
+// 07/03/2020 Company Type
+
+    showspinner();     // 20/02/2020
+    document.getElementById("updatestatus").innerHTML = "Searching, please wait......&nbsp&nbsp&nbsp&nbsp&nbsp";
+
+    var url = "https://api2.redflagalert.net/v4/companies/?" + 
+            search_postcode + 
+            distance + 
+            rfa_rating + 
+            sector + 
+            search_date + 
+            turnover + 
+            estimate_turnover +
+            employees + 
+            estimate_employees + 
+            company_name + 
+            nontrading + 
+            sic + 
+            hascontact +
+            company_type +
+            tpscontact; // 17/02/2020
+
+    gv_url = url;
+    console.log(url);
+   
+    var request = new XMLHttpRequest()
+
+    request.open('GET', url, true)
+    request.setRequestHeader("Authorization","Basic dEFrbnViUENSTDJHdnRYdm1XTDd1aTEzWjpPdU5TQVBBVzBXaEMyNHV5RkNGemlhU2FWb0IyTldMSTFTVmdZVFMyM2E5");
+    request.onload = function() 
+    {
+
+      // Begin accessing JSON data here
+      var obj1 = JSON.parse(this.response)
+
+      console.log(obj1);
+
+    //    var n = data.includes("Error");
+    //    if (n == true)
+    //    {
+    //        document.getElementById("updatestatus").innerHTML = "Oops, search failed! Possibly the postcode is invalid.";
+    //        SetRed();
+    //        return false;
+    //    }
+     //   var obj1 = JSON.parse(data);
+        number_records_formatted = formatNumber(obj1.meta.count);
+
+/* Check of any records found */
+        if (obj1.meta.count > 0)
+        {
+            document.getElementById("updatestatus").innerHTML = "<p class='number_records'>" + number_records_formatted + "</p> records found. Search Results displays the first 50 records."; 
+            gv_records = obj1.meta.count;
+            if (obj1.meta.count > 10000)
+            {
+                document.getElementById("updatestatus").innerHTML = "<p class='number_records'>" + number_records_formatted + "</p> records found. Please select less than 10,000 records per search."; 
+                document.getElementById("ok-update").disabled = true;       
+            }
+            else
+            {
+                document.getElementById("ok-update").innerHTML = "Generate " + number_records_formatted + " Leads records";
+                document.getElementById("ok-update").disabled = false;
+            }
+        }
+        else
+        {
+            /* No Records */
+            document.getElementById("updatestatus").innerHTML = "No Records found";
+        }
+        hidespinner(); // 20/02/2020
+        //
+        // Determine how many credits
+        //
+        total_credits = parseInt(gv_counter) + parseInt(gv_additional_credits);
+        console.log("Total Credits : " + total_credits);
+        if (obj1.meta.count > total_credits)
+        {
+            document.getElementById("updatestatus").innerHTML = "<p class='number_records'>" + number_records_formatted + "</p> records found, only  " +
+            "<p class='number_records'>" + total_credits + "</p> credits left, so this many leads will be generated. Search Results displays the first 50 records.";
+            document.getElementById("ok-update").innerHTML = "Generate " + total_credits + " Leads records";
+            document.getElementById("ok-update").disabled = false;
+        }
+        if (obj1.meta.count > 10000)
+        {
+            document.getElementById("updatestatus").innerHTML = "<p class='number_records'>" + number_records_formatted + "</p> records found. Please select less than 10,000 records per search."; 
+            document.getElementById("ok-update").innerHTML = "Generate Leads records";
+            document.getElementById("ok-update").disabled = true;       
+        }
+        txt = "<table class='scheduler-list-table' id='table'>";
+        txt += "<tr><td style='width: 20px'>" + "Company No." 
+                + "</td><td align='left' style='width: 200px'>" + "Company Name" 
+                + "</td><td align='right' style='width: 20px'>" + "Postcode" 
+                + "</td><td align='right' style='width: 16px'>" + "Type" 
+                + "</td><td align='right' style='width: 40px'>" + "Turnover" 
+                + "</td><td align='right' style='width: 20px'>" + "Employees" 
+                + "</td><td align='right' style='width: 50px'>" + "Oldest Director" 
+                + "</td><td align='right' style='width: 200px'>" + "SIC Description"  
+                + "</td><td align='right' style='width: 60px'>" + "RFA Rating" + 
+                "</td></tr>";
+        var newdata = obj1.data;
+
+        //console.log(newdata);
+        for (i=0; i<newdata.length; i++) 
+        {
+            has_estimate_employees = "N";
+            has_employees = "N";
+            employees = "";
+            if (!newdata[i].attributes.employees) 
+            {
+            }
+            else 
+            {
+                employees = formatNumber(newdata[i].attributes.employees); 
+                has_employees = "Y";
+            }
+            if (has_employees == "N")
+            {
+                if (!newdata[i].attributes.estimated_employees) 
+                {
+                }
+                else
+                {
+                    employees = formatNumber(newdata[i].attributes.estimated_employees) + " (est.)"; 
+                    has_estimate_employees = "Y";
+                }
+            }
+
+            sic07_descriptions = "Not Known";
+            if (!newdata[i].attributes.sic07_group_descriptions) 
+            {}
+            else
+            {
+                sic07_descriptions = newdata[i].attributes.sic07_group_descriptions;
+            }
+            if (!newdata[i].attributes.rfa_rating.short_description) 
+            {
+                var short_description = " ";
+            }
+            else 
+            {
+                var short_description = newdata[i].attributes.rfa_rating.short_description;
+                var rating_code = newdata[i].attributes.rfa_rating.short_code;
+            }       
+        
+            has_estimate_turnover = "N";
+            has_turnover = "N";             
+            var turnover = " "; 
+            if (!newdata[i].attributes.turnover) 
+            {
+            }
+            else 
+            {
+                var turnover = formatNumber(newdata[i].attributes.turnover); 
+                has_turnover = "Y";
+            }
+            if (has_turnover == "N")
+            {
+                if (!newdata[i].attributes.estimated_turnover) 
+                {
+                }
+                else
+                {
+                    var turnover = formatNumber(newdata[i].attributes.estimated_turnover) + " (est.)"; 
+                    has_estimate_turnover = "Y";
+                }
+            }
+
+            if (!newdata[i].attributes.oldest_director) 
+            {
+                var oldest_director = "";
+            }
+            else 
+            {
+                if (!newdata[i].attributes.oldest_director.title)
+                {                       
+                    title = "";
+                }
+                else
+                {
+                    title = newdata[i].attributes.oldest_director.title + " ";
+                }
+                var oldest_director = title + newdata[i].attributes.oldest_director.first_name + " " + newdata[i].attributes.oldest_director.surname; 
+            }
+            var id = newdata[i].id;
+                        
+            name = toTitleCase(newdata[i].attributes.name);
+
+            if (newdata[i].attributes.addresses && newdata[i].attributes.addresses.length) 
+            {
+                if (!newdata[i].attributes.addresses[0].postcode) 
+                {
+                    var postcode = " ";
+                }
+                else 
+                {
+                    var postcode = newdata[i].attributes.addresses[0].postcode; 
+                }
+            
+                if (!newdata[i].attributes.addresses[0].address_line_1)             
+                {
+                    var address_line_1 = " ";           
+                }
+                else            
+                {
+                    var address_line_1 = newdata[i].attributes.addresses[0].address_line_1;         
+                }
+                if (!newdata[i].attributes.addresses[0].address_line_2)             
+                {
+                    var address_line_2 = " ";           
+                }
+                else            
+                {
+                    var address_line_2 = newdata[i].attributes.addresses[0].address_line_2;     
+                } 
+                var address = address_line_1 + " " +address_line_2; 
+            
+                if (!newdata[i].attributes.addresses[0].type)           
+                {
+                    var type = " ";         
+                }
+                else            
+                {
+                    var type = newdata[i].attributes.addresses[0].type;     
+                } 
+            }
+            else 
+            { 
+                var postcode = " ";
+                var address = " " ;
+                var type = " ";
+            }
+            colour = "gray";
+            if (rating_code == "silver")
+            {
+                colour = "silver";              
+            }
+            else if (rating_code == "gold")
+            {
+                colour = "gold";                
+            }
+            else if (rating_code == "bronze")
+            {
+                colour = "bronze";              
+            }
+            else if (rating_code == "redflag1" || rating_code == "redflag2" || rating_code == "redflag3")
+            {
+                colour = "red";             
+            }
+            else if (rating_code == "amber")
+            {
+                colour = "amber";               
+            }
+            estimate_colour = "";
+            if (has_estimate_employees == "Y")
+            {
+                employee_colour = "#3b56f8";
+            }
+            else
+            {
+                employee_colour = "";
+            }
+            turnover_colour = "";
+            if (has_estimate_turnover == "Y")
+            {
+                turnover_colour = "#3b56f8";
+            }
+            else
+            {
+                turnover_colour = "";
+            }
+            //console.log("Company type: " + newdata[i].attributes.company_type);
+            //private-limited-guarant-nsc-limited-exemption
+            company_type = "other";   
+            if (newdata[i].attributes.company_type == "ltd")
+            {
+                company_type = "Limited";
+            }
+            else if (newdata[i].attributes.company_type == "plc")
+            {
+                company_type = "PLC";
+            }
+            else if (newdata[i].attributes.company_type == "llp")
+            {
+                company_type = "LLP";
+            }
+            else if (newdata[i].attributes.company_type == "private-unlimited")
+            {
+                company_type = "Non Limited";
+            }
+            txt += 
+                    "<tr><td style='width: 20px' style='font-weight:600'>" + id 
+                    + "</td><td align='left' style='width: 200px'>" + name
+                    + "</td><td align='right' style='width: 20px'>" + postcode 
+                    + "</td><td align='right' style='width: 16px'>" + company_type
+                    + "</td><td align='right' style='width: 40px;color: " + turnover_colour + ";'>" + turnover
+                    + "</td><td align='right' style='width: 20px;color: " + employee_colour + ";'>" + employees
+                    + "</td><td align='right' style='width: 50px'>" + oldest_director   
+                    + "</td><td align='right' style='width: 200px'>" + sic07_descriptions
+                    + "</td><td align='right' style='width: 60px'>" + 
+                    "<div class='wrap-ind'>" + short_description + "&nbsp" + "<span class='indicator " + colour + "'></span></div>"
+                    + "</td></tr>";
+        } // Loop array
+
+        txt += "</table>"; 
+      document.getElementById("search_results").innerHTML = txt;
+
+      }
+
+      request.send();
+
+     
+
+}
+
+
+
+/* Check a row has been highlights then enable update button */
+function addRowHandlers() {
+    var table = document.getElementById("table");
+    var rows = table.getElementsByTagName("tr");
+    for (i = 0; i < rows.length; i++) 
+    {
+        var currentRow = table.rows[i];
+        var createClickHandler = 
+            function(row) 
+            {
+                return function() 
+                { 
+                    var cell = row.getElementsByTagName("td")[0];
+                    var id = cell.innerHTML;
+                    if (id == "Company No.")
+                    {
+                        document.getElementById("ok-lead").disabled = true;
+                    }
+                    else
+                    {
+                        document.getElementById("ok-lead").disabled = false;
+                    }
+                };
+            };
+        currentRow.onclick = createClickHandler(currentRow);
+    }
+}
+function ClearSIC()
+{
+
+// 01/02/2020 Clear SIC Sector
+    $("#multipleSelect2").val("all");
+    $("#multipleSelect2").selectpicker('refresh');
+// 01/02/2020 Clear SIC Sector
+
+    var options = document.getElementById('multipleSelect3').options;
+    count_items = 0;
+    for (i = 0; i < options.length; i++) 
+    {
+        document.getElementById('multipleSelect3').options[i].style.display = "";       
+    }
+    $("#multipleSelect3").val("all");
+    $("#multipleSelect3").selectpicker('refresh');
+    document.getElementById("sic-search-name").value = "";
+    document.getElementById("sic-search-name").select();
+    update_generate();
+}
+function SetRed()
+{
+    text = document.getElementById("updatestatus").innerHTML;
+    document.getElementById("updatestatus").innerHTML = "<p class='validation-text'>" + text + "</p>";
+}
+function setCookie(cname,cvalue,exdays) 
+{
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+
+    console.log("HERE!!!! QQQ");
+    //document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;SameSite=None; Secure";
+    //document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;samesite=None; Secure";
+    //document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;SameSite=None;Secure=TRUE";
+
+    //document.cookie.httpOnly = true;
+    console.log("document.cookie: " + document.cookie);
+
+}
+function getCookie(cname) 
+{
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+
+    console.log("decodeCookie: " + cname + " - " + decodedCookie);
+
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i < ca.length; i++) 
+    {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') 
+        {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) 
+        {
+        return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+function checkCookie() 
+{
+    var user=getCookie("redflag");
+    if (user != "") 
+    {
+        console.log("Cookie Data: " + user);
+        var nameArr = user.split(',');
+
+        if (typeof nameArr[0] === "undefined") 
+        {} else { document.forms["frm_search_name"]["fname-search-name"].value = nameArr[0]; }
+        
+        if (typeof nameArr[1] === "undefined") 
+        {} else { document.getElementById("search-date").value = nameArr[1]; }
+
+        if (typeof nameArr[2] === "undefined") 
+        {} else { document.getElementById("turnover").value = nameArr[2]; }
+
+        if (typeof nameArr[3] === "undefined") 
+        {} else { document.getElementById("employees").value = nameArr[3]; }
+
+        if (typeof nameArr[4] === "undefined") 
+        {} else { document.getElementById("distance").value = nameArr[4]; }
+
+        if (typeof nameArr[5] === "undefined") 
+        {} else { document.getElementById("post-code").value = nameArr[5]; }
+
+        if (typeof nameArr[6] === "undefined") 
+        {} else { document.getElementById("company-name").value = nameArr[6]; }
+        
+        if (typeof nameArr[7] === "undefined") 
+        {} else { document.getElementById("nontrading").selectedIndex = nameArr[7]; }
+        
+        if (typeof nameArr[8] === "undefined") 
+        {} else { document.getElementById("turnoverto").value = nameArr[8];  }
+        
+        if (typeof nameArr[9] === "undefined") 
+        {} else { document.getElementById("employeesto").value = nameArr[9]; }
+        
+        if (typeof nameArr[10] === "undefined") 
+        {} else { document.getElementById("search-dateto").value = nameArr[10]; }
+
+        if (typeof nameArr[12] === "undefined") 
+        {} else { document.getElementById("hascontact").selectedIndex = nameArr[12]; }
+        
+        if (typeof nameArr[13] === "undefined") 
+        {} else { document.getElementById("estimate-turnover").value = nameArr[13]; }
+
+        if (typeof nameArr[14] === "undefined") 
+        {} else { document.getElementById("estimate-turnoverto").value = nameArr[14]; }
+
+        if (typeof nameArr[15] === "undefined") 
+        {} else { document.getElementById("estimate-employees").value = nameArr[15]; }
+
+        if (typeof nameArr[16] === "undefined") 
+        {} else { document.getElementById("estimate-employeesto").value = nameArr[16]; }
+
+        // 07/03/2020 Has Contact
+        if (typeof nameArr[17] === "undefined") 
+        {} 
+        else 
+        { 
+            if (nameArr[17] == "ON")
+            {
+                document.getElementById("has_contacts-switch").checked = true;
+                console.log("Has Contact Switch: " + nameArr[17]);                 
+            }
+        }
+        if (typeof nameArr[18] === "undefined") 
+        {} 
+        else 
+        { 
+            if (nameArr[18] == "ON")
+            {
+                document.getElementById("tps-switch").checked = true;
+                console.log("TPS Switch: " + nameArr[18]);                 
+            }
+        }
+        // 07/03/2020 Has Contact
+    }
+
+// 02/10/2019 Separate Cookie to store RFA Rating Multi- select
+    var user=getCookie("rfa_redflag");
+    if (user != "") 
+    {
+        var arr = JSON.parse(user);
+        $('#multipleSelect1').val(arr);
+        $("#multipleSelect1").selectpicker('refresh');
+    }
+    else
+    {
+// 14/10/2019 If not exist default to all
+        $("#multipleSelect1").val("all");
+        $("#multipleSelect1").selectpicker('refresh');
+    }
+
+// 03/10/2019 Separate Cookie to store Sector Multi- select
+    var user=getCookie("sector_redflag");
+    if (user != "") 
+    {
+        var arr = JSON.parse(user);
+        $('#multipleSelect2').val(arr);
+        $("#multipleSelect2").selectpicker('refresh');
+
+        console.log("sector-redflag: " + JSON.parse(user));
+
+// Start 29/02/2020 fix bug on load, now updated SIC Code Description
+        check_sector();
+// End 29/02/2020
+    }
+    else
+    {
+// 14/10/2019 If not exist default to all
+        $("#multipleSelect2").val("all");
+        $("#multipleSelect2").selectpicker('refresh');
+    }
+
+    //if (typeof nameArr[11] === "undefined") 
+    //{} 
+    //else    
+    //{ 
+    //          document.getElementById("sic-search-name").value = nameArr[11]; 
+    //
+    //          // if SIC filter has a value then filter it
+    //        if (document.getElementById("sic-search-name").value != "")
+    //      {
+    //        sic_sector();   
+    //            }
+    //      }
+
+    var user=getCookie("sic_redflag");
+    if (user != "") 
+    {
+        var arr = JSON.parse(user);
+        console.log("sic-redflag: " + JSON.parse(user));
+        $('#multipleSelect3').val(arr);
+        $("#multipleSelect3").selectpicker('refresh');
+    }
+    else
+    {
+        document.getElementById("sic-search-name").value = '';    
+        $("#multipleSelect3").val("all");
+        $("#multipleSelect3").selectpicker('refresh');
+    }
+
+    // 07/03/2020   
+    var user=getCookie("company_type_redflag");
+    if (user != "") 
+    {
+        var arr = JSON.parse(user);
+        $('#multipleSelect4').val(arr);
+        $("#multipleSelect4").selectpicker('refresh');
+    }
+    else
+    {
+        $("#multipleSelect4").val("all");
+        $("#multipleSelect4").selectpicker('refresh');
+    }
+    // 07/03/2020   
+
+    // 15/03/2020 Cookie for Video on Search Tab
+     var user=getCookie("hide-video_redflag");
+    if (user != "") 
+    {
+        if (user == "HIDE")
+        {
+            console.log("Hide Video");
+            var x = document.getElementById("divR");
+            x.style.display = "none";
+        }
+    }
+    // 15/03/2020 Cookie for Video on Search Tab
+} 
+function DeleteAndSetCookie(cname) 
+{
+    console.log("Delete and Set Cookie");
+    // Delete Cookie
+    cname = "redflag";
+    setCookie(cname, "", 0);
+    propsector_search_name = document.getElementById("search-name").value;
+    incorpration_date = document.getElementById("search-date").value;
+    turnover = document.getElementById("turnover").value;
+    employees = document.getElementById("employees").value;
+    miles = document.getElementById("distance").value;
+    postcode = document.getElementById("post-code").value;
+    companyname = document.getElementById("company-name").value;
+    nontrading = document.getElementById("nontrading").selectedIndex;
+    // 26/12/2019
+    //var sic = $('#selected').val();
+    var sic = document.getElementById("sic-search-name").value;
+    turnoverto = document.getElementById("turnoverto").value;
+    employeesto = document.getElementById("employeesto").value;
+    incorpration_dateto = document.getElementById("search-dateto").value;
+    hascontact = document.getElementById("hascontact").selectedIndex;
+    estimate_turnover = document.getElementById("estimate-turnover").value;
+    estimate_turnoverto = document.getElementById("estimate-turnoverto").value;
+    estimate_employees = document.getElementById("estimate-employees").value;
+    estimate_employeesto = document.getElementById("estimate-employeesto").value;
+
+    // 07/03/2020
+    hascontact_switch = "OFF";   
+    var contacts_switch = document.getElementById("has_contacts-switch");
+    if (contacts_switch.checked == true)
+    {
+        console.log("contacts-switch: ON");        
+        hascontact_switch = "ON";
+    }
+    tpscontact = "OFF";
+    var tps_switch = document.getElementById("tps-switch");
+    if (tps_switch.checked == true)
+    {
+        console.log("tps-switch: ON (false)");        
+        tpscontact = "ON";
+    }
+    // 07/03/2020
+
+    cvalue = propsector_search_name + "," +              
+             incorpration_date + "," +               
+             turnover + "," +            
+             employees + "," +
+             miles + "," +           
+             postcode + "," +            
+             companyname + "," +
+             nontrading + "," +          
+             turnoverto + "," +          
+             employeesto + "," +             
+             incorpration_dateto + "," +             
+             sic + "," +             
+             hascontact + "," +          
+             estimate_turnover + "," +           
+             estimate_turnoverto + "," +             
+             estimate_employees + "," +          
+             estimate_employeesto + "," +          
+             hascontact_switch + "," +          
+             tpscontact;
+    setCookie(cname, cvalue, 30);
+
+// 02/10/2019 Separate Cookie to store RFA Rating Multi- select
+    cname = "rfa_redflag";
+    setCookie(cname, "", 0); // Delete Cookie
+    var value = $('#multipleSelect1').val();
+    var rfa_rating = JSON.stringify(value);
+    cvalue = rfa_rating;
+    setCookie(cname, cvalue, 30); 
+
+// 03/10/2019 Separate Cookie to store Sector Multi- select
+    cname = "sector_redflag";
+    setCookie(cname, "", 0); // Delete Cookie
+    var value = $('#multipleSelect2').val();
+    var rfa_rating = JSON.stringify(value);
+    cvalue = rfa_rating;
+    setCookie(cname, cvalue, 30); 
+
+// 26/12/2019
+    cname = "sic_redflag";
+    setCookie(cname, "", 0); // Delete Cookie
+    var value = $('#multipleSelect3').val();
+    var rfa_rating = JSON.stringify(value);
+    cvalue = rfa_rating;
+    setCookie(cname, cvalue, 30); 
+// 26/12/2019
+
+// 07/03/2020
+    cname = "company_type_redflag";
+    setCookie(cname, "", 0); // Delete Cookie
+    var value = $('#multipleSelect4').val();
+    var rfa_rating = JSON.stringify(value);
+    cvalue = rfa_rating;
+    setCookie(cname, cvalue, 30); 
+// 07/03/2020
+    console.log("Finished Delete and Set Cookie");
+}
+// Start 26/12/2019
+function sic_sector()
+{
+    document.getElementById("updatestatus").innerHTML = "";
+    if (document.getElementById('sic-search-name').value != "")
+    {
+        document.getElementById('multipleSelect3').options[0].style.display = "none";       
+        $("#multipleSelect3").val("");
+    }
+    else
+    {
+        $("#multipleSelect3").val("all");
+        document.getElementById('multipleSelect3').options[0].style.display = "";       
+    }
+
+    var options = document.getElementById('multipleSelect3').options;
+    count_items = 0;
+    for (i = 0; i < options.length; i++) 
+    {
+        search_string = options[i].text.toLowerCase();
+        search_value = document.getElementById('sic-search-name').value.toLowerCase();
+        if (search_string.includes(search_value))
+        {
+            document.getElementById('multipleSelect3').options[i].style.display = "";       
+            value = document.getElementById('multipleSelect3').options[i].value;
+            count_items += 1;
+        }
+        else
+        {
+            document.getElementById('multipleSelect3').options[i].style.display = "none";       
+        }
+    }
+    // if we have one item, then selected it 
+    if (count_items == 1)
+    {
+        console.log("Count Items: " + count_items);
+        console.log("value : " + value);
+        $('#multipleSelect3').val(value);
+    }
+    if (count_items == 0)
+    {
+        document.getElementById("updatestatus").innerHTML = "No SIC classifications found.";
+        SetRed();
+        document.forms["frm_search_name"]["sic-search-name"].focus();   
+        $("#multipleSelect3").val("");
+    }
+    $("#multipleSelect3").selectpicker('refresh');      
+
+//01/02/2020 Reset SIC Sector
+    $("#multipleSelect2").val("all");
+    $("#multipleSelect2").selectpicker('refresh');
+
+}
+function check_sic()
+{
+    // Only allow one selection 
+    update_generate();
+    var value = $('#multipleSelect3').val();
+    var x = document.getElementById("multipleSelect3").selectedIndex;
+    if(value.length >1)
+    {
+        if (gv_index > x)
+        {
+            value.splice(-1,1)  
+        }
+        else
+        {
+            value.splice(0,1)
+        }
+    }
+    $('#multipleSelect3').val(value);
+    $("#multipleSelect3").selectpicker('refresh');      
+    gv_index = document.getElementById("multipleSelect3").selectedIndex;
+    console.log("SIC Value " + $('#multipleSelect3').val());
+}
+// End 26/12/2019
+
+function CancelScheduler()
+{
+    console.log(gv_current_schedule_id);
+    if (gv_current_schedule_id > 0 )
+    {
+        var id = gv_current_schedule_id.toString();
+        console.log(id);
+        var config =
+        {
+            Entity:"redflagprospector__Prospector_Lists",
+            APIData:
+            {
+                "id": id,
+                "redflagprospector__Process_Status": "Cancelled",
+                "redflagprospector__status": "Schedule cancelled."
+            },
+            Trigger:[]
+        };      
+        ZOHO.CRM.API.updateRecord(config)
+        .then(function(data)
+        {
+            console.log(data);
+            document.getElementById("message-line").innerHTML = "Waiting schedule has been cancelled successfully.";
+        });
+    }
+    else
+    {
+        document.getElementById("message-line").innerHTML = "No waiting schedule to be cancelled.";
+    }
+}
+//
+// SIC Sector
+//
+function check_sector()
+{
+    update_generate();
+    var value = $('#multipleSelect2').val();
+    // If nothing is selected, default to ALL
+
+    //if (!value || !value.length)
+    // 07/03/2020 On load SIC Code Description with not being populated
+    if ((!value || !value.length) || (value == "all"))
+    {
+        // array does not exist, is not an array, or is empty do not attempt to process array
+        $("#multipleSelect2").val("all");
+        $("#multipleSelect2").selectpicker('refresh');
+        gv_sector_all = "Y";
+
+        // 01/02/2020 if SIC Sector is ALL, set SIC Classification to all
+        var options = document.getElementById('multipleSelect3').options;
+        count_items = 0;
+        for (i = 0; i < options.length; i++) 
+        {
+            document.getElementById('multipleSelect3').options[i].style.display = "";       
+        }   
+        $("#multipleSelect3").val("all");
+        $("#multipleSelect3").selectpicker('refresh');
+        // 01/02/2020 if SIC Sector is ALL, set SIC Classification to all
+    }
+    else
+    {
+        // 04/10/19 Found out if all is selected
+        all_selected = "N";
+        for (i = 0; i < value.length; i++) 
+        {
+            if (value[i] == "all")
+            {
+                all_selected = "Y";
+            }
+        }
+        // If all is selected and another value is selected, remove all
+        if(value.length >1 && all_selected == "Y")
+        {
+            value.splice(0,1);
+            $('#multipleSelect2').val(value);
+            $("#multipleSelect2").selectpicker('refresh');
+        }
+
+        // 01/02/2020 Filter SIC Classification by SIC Sector
+        search_value = [];
+        for (i = 0; i < value.length; i++) 
+        {
+            arr_string = "(" + value[i] + ")";
+            search_value.push(arr_string);
+        }
+        console.log("SIC Sector: " + search_value);
+        var options = document.getElementById('multipleSelect3').options;
+        count_items = 0;
+        for (i = 0; i < options.length; i++) 
+        {
+            search_string = options[i].text;
+            if (search_string.includesOneOf(search_value)) 
+            {
+                document.getElementById('multipleSelect3').options[i].style.display = "";       
+                value = document.getElementById('multipleSelect3').options[i].value;
+                count_items += 1;
+            }
+            else
+            {
+                document.getElementById('multipleSelect3').options[i].style.display = "none";       
+            }
+        }
+
+        // Clear SIC Code Description and Lookup
+        $("#multipleSelect3").val("all");
+        document.getElementById("sic-search-name").value = '';
+
+        $("#multipleSelect3").selectpicker('refresh');              
+        // 01/02/2020 Filter SIC Classification by SIC Sector
+    }
+}
+
+// 07/03/2020
+function check_company_type()
+{
+    update_generate();
+    var value = $('#multipleSelect4').val();
+    // If nothing is selected, default to ALL
+    if (!value || !value.length) 
+    {
+        // array does not exist, is not an array, or is empty do not attempt to process array
+        $("#multipleSelect4").val("all");
+        $("#multipleSelect4").selectpicker('refresh');
+        //gv_sector_all = "Y";
+    }
+    else
+    {
+        // 04/10/19 Found out if all is selected
+        all_selected = "N";
+        for (i = 0; i < value.length; i++) 
+        {
+            if (value[i] == "all")
+            {
+                all_selected = "Y";
+            }
+        }
+        // If all is selected and another value is selected, remove all
+        if(value.length >1 && all_selected == "Y")
+        {
+            value.splice(0,1);
+            $('#multipleSelect4').val(value);
+            $("#multipleSelect4").selectpicker('refresh');
+        }
+    }
+}
+// 07/03/2020
+
+// RFA Rating, if nothing is selected, default to ALL
+function check_rating()
+{
+    var value = $('#multipleSelect1').val();
+    if (!value || !value.length) 
+    {
+        // array does not exist, is not an array, or is empty do not attempt to process array
+        $("#multipleSelect1").val("all");
+        $("#multipleSelect1").selectpicker('refresh');
+        document.getElementById("rfa-rating-description").innerHTML = "Excludes discontinued, dissolved, not trading and strike off.";
+    }
+    else
+    {
+// 04/10/19 Found out if all is selected
+        document.getElementById("rfa-rating-description").innerHTML = "";
+        all_selected = "N";
+        not_all_or_allx = "N";
+        for (i = 0; i < value.length; i++) 
+        {
+            if (value[i] == "all")
+            {
+                all_selected = "Y";
+                document.getElementById("rfa-rating-description").innerHTML = "Excludes discontinued, dissolved, not trading and strike off.";
+            }
+            else if (value[i] == "allx")
+            {
+                document.getElementById("rfa-rating-description").innerHTML = "Includes discontinued, dissolved, not trading and strike off.";
+            }
+            else
+            {
+                not_all_or_allx = "Y";
+            }
+        }
+
+        if (not_all_or_allx == "Y")
+        {
+            document.getElementById("rfa-rating-description").innerHTML = "";
+        }
+
+        // If all is selected and another value is selected, remove all
+        if(value.length >1 && all_selected == "Y")
+        {
+            value.splice(0,1);
+            $('#multipleSelect1').val(value);
+            $("#multipleSelect1").selectpicker('refresh');
+        }
+    }
+    update_generate();
+}
+// Clear Generate Leads Record Button
+function update_generate()
+{
+    document.getElementById("ok-update").disabled = true;
+    document.getElementById("ok-update").innerHTML = "Generate Leads Records";
+    document.getElementById("search_results").innerHTML = "";
+    document.getElementById("updatestatus").innerHTML = "";
+}
+
 </script>
